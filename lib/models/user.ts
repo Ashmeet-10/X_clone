@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   tweets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tweet' }],
   liked: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tweet' }],
   bookmarked: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tweet' }],
+  reposted: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tweet' }],
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   communities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Community' }],

@@ -1,7 +1,7 @@
 'use client'
 
 import { joinOrLeaveCommunity } from '@/lib/actions/communityActions'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import { usePathname } from 'next/navigation'
 
 const JoinCommunityButton = ({ communityId }: { communityId: string }) => {

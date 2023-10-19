@@ -1,7 +1,6 @@
-import BookmarkButton from '@/components/BookmarkButton'
-import LikeButton from '@/components/LikeButton'
-// import Replies from '@/components/Replies'
-import ReplyForm from '@/components/ReplyForm'
+import BookmarkButton from '@/components/Buttons/BookmarkButton'
+import LikeButton from '@/components/Buttons/LikeButton'
+import ReplyForm from '@/components/Forms/ReplyForm'
 import TweetCard from '@/components/TweetCard'
 import { fetchTweetByTweetId } from '@/lib/actions/tweetActions'
 import { fetchUser } from '@/lib/actions/userActions'
@@ -20,8 +19,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import NonInteractiveTweetDialog from '@/components/NonInteractiveTweetDialog'
-import BackButton from '@/components/BackButton'
+import NonInteractiveTweetDialog from '@/components/Dialogs/NonInteractiveTweetDialog'
+import BackButton from '@/components/Buttons/BackButton'
 import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
 
@@ -30,12 +29,13 @@ const Replies = async ({ tweet }: { tweet: any }) => {
     path: 'replies',
     populate: {
       path: 'author',
+      select: 'name username image id following followers bio',
     },
   })
   return <TweetsList tweets={replies.replies} />
 }
 
-const page = async ({ params }: { params: { id: string } }) => {
+const Tweet = async ({ params }: { params: { id: string } }) => {
   const currentuser = await currentUser()
   if (!currentuser) return null
   const userInfo = fetchUser(currentuser.id)
@@ -43,10 +43,6 @@ const page = async ({ params }: { params: { id: string } }) => {
   const [user, tweet] = await Promise.all([userInfo, tweetInfo])
   return (
     <div className='relative'>
-      <div className='flex space-x-10 font-bold sticky top-0 z-10 bg-black/80 backdrop-blur-md left-0 p-4 text-lg items-center'>
-        <BackButton />
-        <span>Post</span>
-      </div>
       <div className='mx-4'>
         <div className=''>
           <TweetCard tweet={tweet} post={true} currentUser={user} />
@@ -70,7 +66,7 @@ const page = async ({ params }: { params: { id: string } }) => {
             href={`/tweet/${params.id}/quotes`}
             className='flex space-x-1 mr-4'
           >
-            <span className='font-bold'>{tweet.quotedBy.length}</span>
+            <span className='font-bold'>{tweet.quotes.length}</span>
             <span className='opacity-40'>Quotes</span>
           </Link>
           <div className='flex space-x-1 mr-4'>
@@ -147,10 +143,6 @@ const page = async ({ params }: { params: { id: string } }) => {
                 </PopoverContent>
               </Popover>
             </TooltipProvider>
-            {/* <LikeButton
-              tweetId={tweet._id.toString()}
-              liked={user.liked.includes(tweet._id)}
-            /> */}
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -161,6 +153,8 @@ const page = async ({ params }: { params: { id: string } }) => {
                           <LikeButton
                             tweetId={tweet._id.toString()}
                             liked={user.liked.includes(tweet._id)}
+                            count={tweet.likes.length}
+                            showLikeCount={false}
                           />
                         ) : (
                           <NonInteractiveTweetDialog type='like' />
@@ -170,10 +164,9 @@ const page = async ({ params }: { params: { id: string } }) => {
                       <LikeButton
                         tweetId={tweet._id.toString()}
                         liked={user.liked.includes(tweet._id)}
+                        count={tweet.likes.length}
+                        showLikeCount={false}
                       />
-                    )}
-                    {tweet.likes.length > 0 && (
-                      <span className='text-sm'>{tweet?.likes?.length}</span>
                     )}
                   </div>
                 </TooltipTrigger>
@@ -203,14 +196,27 @@ const page = async ({ params }: { params: { id: string } }) => {
         </div>
         <div className='mt-4'>
           <Suspense
-            fallback={<Loading className='min-h-[90vh] items-start mt-4' />}
+            fallback={<Loading className='min-h-[80vh] items-start mt-4' />}
           >
-            {/* <Replies tweetId={tweet?._id.toString()} likedTweets={user.liked} /> */}
             <Replies tweet={tweet} />
           </Suspense>
         </div>
       </div>
     </div>
+  )
+}
+
+const page = ({ params }: { params: { id: string } }) => {
+  return (
+    <>
+      <div className='flex space-x-10 font-bold sticky top-0 z-10 bg-black/80 backdrop-blur-md left-0 p-4 text-lg items-center'>
+        <BackButton />
+        <span>Post</span>
+      </div>
+      <Suspense fallback={<Loading className='items-start' />}>
+        <Tweet params={params} />
+      </Suspense>
+    </>
   )
 }
 

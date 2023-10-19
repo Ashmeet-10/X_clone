@@ -1,4 +1,4 @@
-import TweetForm from '@/components/TweetForm'
+import TweetForm from '@/components/Forms/TweetForm'
 import Tweet from '@/lib/models/tweet'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
@@ -9,8 +9,16 @@ const page = async ({ params }: { params: { id: string } }) => {
   const currentUserInfo = currentUser()
   const [db, currentuser] = await Promise.all([database, currentUserInfo])
   if (!currentuser) return null
-  const userInfo = User.findOne({ id: currentuser.id }).populate('communities')
-  const tweetInfo = Tweet.findById(params.id).populate('author')
+  const userInfo = User.findOne({ id: currentuser.id })
+    .select('image communities')
+    .populate({
+      path: 'communities',
+      select: 'name',
+    })
+  const tweetInfo = Tweet.findById(params.id).select('author text').populate({
+    path: 'author',
+    select: 'image name username',
+  })
   const [user, tweet] = await Promise.all([userInfo, tweetInfo])
   return (
     <div className='m-4'>

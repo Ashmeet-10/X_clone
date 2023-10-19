@@ -2,14 +2,12 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
   DialogClose,
 } from '@/components/ui/dialog'
-import JoinCommunityButton from './JoinCommunityButton'
+import JoinCommunityButton from '../Buttons/JoinCommunityButton'
 
 type Props = {
   community: {

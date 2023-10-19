@@ -1,22 +1,24 @@
-import FollowButton from '@/components/FollowButton'
 import Loading from '@/components/Loading'
-import ProfileHoverCard from '@/components/ProfileHoverCard'
 import UsersList from '@/components/UsersList'
 import { fetchUser } from '@/lib/actions/userActions'
 import Community from '@/lib/models/community'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
 import { CalendarDays, Globe, Users } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
 const AboutCommunity = async ({ params }: { params: { id: string } }) => {
   connectToDB()
   const communityInfo = Community.findById(params.id)
-    .populate('members')
+    .select('rules createdBy members createdAt')
+    .populate({
+      path: 'members',
+      select: 'name username image id following followers bio',
+    })
     .populate({
       path: 'createdBy',
+      select: 'name username image id following followers bio',
     })
   const currentUserInfo = currentUser()
   const [community, currentuser] = await Promise.all([

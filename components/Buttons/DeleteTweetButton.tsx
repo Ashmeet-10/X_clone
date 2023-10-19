@@ -1,7 +1,7 @@
 'use client'
 
 import { deleteTweet } from '@/lib/actions/tweetActions'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import { usePathname } from 'next/navigation'
 
 const DeleteTweetButton = ({ tweetId }: { tweetId: string }) => {

@@ -21,7 +21,6 @@ export async function createTweet({ text }: { text: string }) {
     userInfo.tweets = [tweet._id, ...userInfo.tweets]
     await userInfo.save()
     revalidatePath('/')
-    console.log(tweet)
   } catch (error: any) {
     throw new Error(`Error creating tweet: ${error.message}`)
   }
@@ -36,6 +35,7 @@ export async function fetchTweetByTweetId(tweetId: string) {
         path: 'quotedTweetId',
         populate: {
           path: 'author',
+          select: 'image name username',
         },
       })
     return tweet
@@ -49,7 +49,10 @@ export async function fetchTweets() {
     connectToDB()
     const tweets = await Tweet.find({ parentId: null, community: null })
       .sort({ createdAt: 'desc' })
-      .populate('author')
+      .populate({
+        path: 'author',
+        select: 'name username image id following followers bio',
+      })
       .populate({
         path: 'quotedTweetId',
         populate: {
@@ -94,6 +97,7 @@ export async function fetchCommunityTweetsForCurrentUser() {
     const tweets = userInfo.communities
       .map((community: any) => community.posts)
       .flat()
+      .sort((a: any, b: any) => b.createdAt - a.createdAt)
     return tweets
   } catch (error: any) {
     throw new Error(`Error fetching tweets: ${error.message}`)
@@ -106,13 +110,18 @@ export async function fetchTweetsOfFollowingUsers() {
     const currentUserInfo = currentUser()
     const [db, currentuser] = await Promise.all([database, currentUserInfo])
     if (!currentuser) throw new Error('No user found')
-    const userInfo = await User.findOne({ id: currentuser.id })
+    const userInfo = await User.findOne({ id: currentuser.id }).select(
+      'following'
+    )
     const tweets = await Tweet.find({
       parentId: null,
       author: { $in: userInfo.following },
     })
       .sort({ createdAt: 'desc' })
-      .populate('author')
+      .populate({
+        path: 'author',
+        select: 'name username image id following followers bio',
+      })
       .populate({
         path: 'quotedTweetId',
         populate: {
@@ -274,10 +283,9 @@ export async function quoteTweet({
       author: user._id,
       quotedTweetId: quotedTweetId,
     })
-    if (!user.tweets.includes(tweet._id)) {
-      user.tweets = [tweet._id, ...user.tweets]
-      quotedTweet.quotedBy = [user._id, ...quotedTweet.quotedBy]
-    }
+    user.tweets = [tweet._id, ...user.tweets]
+    quotedTweet.quotes = [tweet._id, ...quotedTweet.quotes]
+
     const userSave = user.save()
     const quotedTweetSave = quotedTweet.save()
     await Promise.all([userSave, quotedTweetSave])
@@ -318,11 +326,14 @@ export async function quoteTweetInCommunity({
     })
     // Find the index of the community with the specified communityId in user.communityTweets
     const communityIndex = user.communityTweets.findIndex(
-      (ct: any) => ct.communityId === community._id
+      (ct: any) => ct.communityId.toString() === community._id.toString()
     )
     if (communityIndex !== -1) {
       // If the community already exists, update its tweets array
-      user.communityTweets[communityIndex].tweets.push(tweet._id)
+      user.communityTweets[communityIndex].tweets = [
+        tweet._id,
+        user.communityTweets[communityIndex].tweets,
+      ]
     } else {
       // If the community doesn't exist, create a new object
       user.communityTweets = [
@@ -333,11 +344,12 @@ export async function quoteTweetInCommunity({
         ...user.communityTweets,
       ]
     }
-    quotedTweet.quotedBy = [user._id, ...quotedTweet.quotedBy]
+    quotedTweet.quotes = [tweet._id, ...quotedTweet.quotes]
     community.posts = [tweet._id, ...community.posts]
+    const quotedTweetSave = quotedTweet.save()
     const userSave = user.save()
     const communitySave = community.save()
-    await Promise.all([userSave, communitySave])
+    await Promise.all([quotedTweetSave, userSave, communitySave])
     revalidatePath('/communities')
   } catch (error) {
     console.error(error)
@@ -398,12 +410,15 @@ export async function createCommunityTweet({
     })
     // Find the index of the community with the specified communityId in user.communityTweets
     const communityIndex = user.communityTweets.findIndex(
-      (ct: any) => ct.communityId === community._id
+      (ct: any) => ct.communityId.toString() === community._id.toString()
     )
 
     if (communityIndex !== -1) {
       // If the community already exists, update its tweets array
-      user.communityTweets[communityIndex].tweets.push(tweet._id)
+      user.communityTweets[communityIndex].tweets = [
+        tweet._id,
+        ...user.communityTweets[communityIndex].tweets,
+      ]
     } else {
       // If the community doesn't exist, create a new object
       user.communityTweets = [
@@ -418,7 +433,7 @@ export async function createCommunityTweet({
     const userSave = user.save()
     const communitySave = community.save()
     await Promise.all([userSave, communitySave])
-    revalidatePath(`/communities`)
+    revalidatePath('/communities')
   } catch (error: any) {
     throw new Error(`Error creating community tweet: ${error.message}`)
   }
@@ -430,62 +445,78 @@ export async function deleteTweet(tweetId: string, pathname: string) {
     const currentUserInfo = currentUser()
     const [db, currentuser] = await Promise.all([database, currentUserInfo])
     if (!currentuser) throw new Error('No user found')
-    const userInfo = User.findOne({ id: currentuser.id })
+    const userInfo = User.findOne({ id: currentuser.id }).select('tweets')
     const tweetInfo = Tweet.findById(tweetId)
+      .populate({ path: 'likes', select: 'liked' })
+      .populate({ path: 'repostedBy', select: 'reposted' })
+      .populate({ path: 'bookmarkedBy', select: 'bookmarked' })
+      .populate({ path: 'author', select: 'communityTweets' })
+      .populate({ path: 'quotes', select: 'quotedTweetId' })
+      .populate({ path: 'quotedTweetId', select: 'quotes' })
+      .populate({ path: 'community', select: 'posts' })
     const [user, tweet] = await Promise.all([userInfo, tweetInfo])
+    console.log(tweet)
     if (tweet.parentId) {
       const parentTweet = await Tweet.findById(tweet.parentId)
-      parentTweet.replies = parentTweet.replies?.filter(
-        (id: any) => id.toString() !== tweetId
-      )
-      await parentTweet.save()
+      if (parentTweet) {
+        parentTweet.replies = parentTweet?.replies?.filter(
+          (id: any) => id.toString() !== tweetId
+        )
+        await parentTweet.save()
+      }
     }
-    const promises1 = tweet.likes?.map(async (userId: any) =>
-      User.findById(userId)
-    )
-    const promises2 = tweet.repostedBy?.map(async (userId: any) =>
-      User.findById(userId)
-    )
-    const promises3 = tweet.bookmarkedBy?.map(async (userId: any) =>
-      User.findById(userId)
-    )
-    const promises4 = tweet.quotedBy?.map(async (userId: any) =>
-      User.findById(userId)
-    )
-    const usersPromise = await Promise.all([
-      promises1,
-      promises2,
-      promises3,
-      promises4,
-    ])
-    const users = new Set(usersPromise)
-    console.log(users)
-    const promises5 = Array.from(users).map(async (user: any) => {
-      user.liked = user.liked?.filter((id: any) => id.toString() !== tweetId)
+    const promise1 = tweet.bookmarkedBy?.map((user: any) => {
       user.bookmarked = user.bookmarked?.filter(
         (id: any) => id.toString() !== tweetId
       )
-      user.quoted = user.quoted?.filter((id: any) => id.toString() !== tweetId)
+      user.save()
+    })
+    const promise2 = tweet.likes?.map((user: any) => {
+      user.liked = user.liked?.filter((id: any) => id.toString() !== tweetId)
+      user.save()
+    })
+    const promise3 = tweet.repostedBy?.map((user: any) => {
       user.reposted = user.reposted?.filter(
         (id: any) => id.toString() !== tweetId
       )
-      if (user._id.toString() === tweet.author._id.toString()) {
-        user.tweets = user.tweets?.filter(
-          (id: any) => id.toString() !== tweetId
-        )
-        user.communityTweets = user.communityTweets?.map(
-          (ct: any) =>
-            (ct.tweets = ct.tweets?.filter(
-              (id: any) => id.toString() !== tweetId
-            ))
-        )
-      }
       user.save()
     })
+
+    const promise4 = tweet.quotes?.map((quote: any) => {
+      quote.quotedTweetId = null
+      quote.save()
+    })
+    if (tweet.community) {
+      tweet.community.posts = tweet.community.posts?.filter(
+        (id: any) => id.toString() !== tweetId
+      )
+    }
+    if (tweet.quotedTweetId) {
+      tweet.quotedTweetId.quotes = tweet.quotedTweetId?.quotes?.filter(
+        (id: any) => id.toString() !== tweetId
+      )
+    }
+
+    tweet.author.communityTweets?.map((ct: any) => {
+      ct.tweets = ct.tweets?.filter((id: any) => id.toString() !== tweetId)
+    })
     user.tweets = user.tweets?.filter((id: any) => id.toString() !== tweetId)
-    const promise6 = user.save()
-    const promise7 = Tweet.deleteOne({ _id: tweetId })
-    await Promise.all([promises5, promise6, promise7])
+    const promise5 = tweet.author.save()
+    const promise6 = tweet?.community?.save()
+    const promise7 = tweet.quotedTweetId?.save()
+    const promise8 = user.save()
+    const promise9 = Tweet.deleteOne({ _id: tweetId })
+    await Promise.all([
+      promise1,
+      promise2,
+      promise3,
+      promise4,
+      promise5,
+      promise6,
+      promise7,
+      promise8,
+      promise9,
+    ])
 
     revalidatePath(pathname)
   } catch (error: any) {

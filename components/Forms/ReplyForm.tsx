@@ -16,8 +16,8 @@ import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import { tweetValidation } from '@/lib/validations/tweetValidation'
 import { createReply } from '@/lib/actions/tweetActions'
-import { Input } from './ui/input'
-import NonInteractiveTweetDialog from './NonInteractiveTweetDialog'
+import { Input } from '../ui/input'
+import NonInteractiveTweetDialog from '../Dialogs/NonInteractiveTweetDialog'
 
 type Props = {
   user: {
@@ -43,8 +43,7 @@ const ReplyForm = ({ user, tweetId, interactiveTweet }: Props) => {
     })
     form.reset()
   }
-
-  console.log('interactiveTweet', interactiveTweet)
+  
   return (
     <Form {...form}>
       <div className='flex'>

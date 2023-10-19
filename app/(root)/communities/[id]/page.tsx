@@ -1,10 +1,7 @@
 import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
-import { fetchUser } from '@/lib/actions/userActions'
 import Community from '@/lib/models/community'
 import { connectToDB } from '@/lib/mongoose'
-import { currentUser } from '@clerk/nextjs'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
@@ -20,6 +17,7 @@ const Tweets = async ({ params }: { params: { id: string } }) => {
       populate: [
         {
           path: 'author',
+          select: 'name username image id following followers bio',
         },
         {
           path: 'quotedTweetId',

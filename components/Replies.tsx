@@ -2,7 +2,7 @@ import Tweet from '@/lib/models/tweet'
 import { BarChart2, Heart, MessageCircle, Repeat } from 'lucide-react'
 import ProfileHoverCard from './ProfileHoverCard'
 import Link from 'next/link'
-import LikeButton from './LikeButton'
+import LikeButton from './Buttons/LikeButton'
 
 type Reply = {
   _id: string
@@ -79,6 +79,7 @@ const Replies = async ({
                 <LikeButton
                   tweetId={reply._id}
                   liked={likedTweets.includes(reply._id)}
+                  count={reply.likes.length}
                 />
                 <span>{reply.likes.length}</span>
               </div>

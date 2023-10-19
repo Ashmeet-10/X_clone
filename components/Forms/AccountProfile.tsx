@@ -21,7 +21,7 @@ import { isBase64Image } from '@/lib/utils'
 import { useUploadThing } from '@/lib/uploadthing'
 import { usePathname, useRouter } from 'next/navigation'
 import { updateUser } from '@/lib/actions/userActions'
-import { Textarea } from './ui/textarea'
+import { Textarea } from '../ui/textarea'
 
 type Props = {
   user: {
@@ -62,17 +62,13 @@ const AccountProfile = ({ user }: Props) => {
 
     await updateUser({
       name: values.name,
-      username: values.username,
-      userId: user.id,
+      username: `@${values.username}`,
       bio: values.bio,
       image: values.image,
     })
 
-    if (pathname === '/profile/edit') {
-      router.back()
-    } else {
-      router.push('/')
-    }
+    if (pathname === '/profile/edit') router.back()
+    else router.push('/')
   }
 
   const handleImage = (
@@ -181,7 +177,10 @@ const AccountProfile = ({ user }: Props) => {
             </FormItem>
           )}
         />
-        <Button type='submit' className='rounded-full w-full font-bold px-4 py-3'>
+        <Button
+          type='submit'
+          className='rounded-full w-full font-bold px-4 py-3'
+        >
           Save
         </Button>
       </form>

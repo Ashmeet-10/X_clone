@@ -6,13 +6,13 @@ import {
 } from '@/components/ui/hover-card'
 import Link from 'next/link'
 import { currentUser } from '@clerk/nextjs'
-import FollowButton from './FollowButton'
-import { fetchUser } from '@/lib/actions/userActions'
+import FollowButton from './Buttons/FollowButton'
+import User from '@/lib/models/user'
 
 const ProfileHoverCard = async ({ author }: any) => {
   const user = await currentUser()
   if (!user) return null
-  const userInfo = await fetchUser(user.id)
+  const userInfo = await User.findOne({ id: user.id }).select('following')
   return (
     <HoverCard>
       <HoverCardTrigger asChild>

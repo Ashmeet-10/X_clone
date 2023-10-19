@@ -23,15 +23,15 @@ import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { tweetValidation } from '@/lib/validations/tweetValidation'
-import { Textarea } from './ui/textarea'
+import { Textarea } from '../ui/textarea'
 import {
   createCommunityTweet,
   createTweet,
   quoteTweet,
   quoteTweetInCommunity,
 } from '@/lib/actions/tweetActions'
-import { ArrowLeft, Globe } from 'lucide-react'
-import BackButton from './BackButton'
+import { Globe } from 'lucide-react'
+import BackButton from '../Buttons/BackButton'
 
 type Props = {
   user: {
@@ -69,6 +69,7 @@ const TweetForm = ({ user, tweet, communities }: Props) => {
           communityName: values.viewer,
         })
       }
+      router.push('/communities')
     } else {
       if (tweet) {
         await quoteTweet({
@@ -80,8 +81,8 @@ const TweetForm = ({ user, tweet, communities }: Props) => {
           text: values.tweet,
         })
       }
+      router.push('/')
     }
-    router.push('/')
   }
 
   return (

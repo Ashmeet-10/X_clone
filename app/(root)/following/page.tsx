@@ -1,7 +1,6 @@
 import LeftSidebar from '@/components/LeftSidebar'
 import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
-import { Button } from '@/components/ui/button'
 import { fetchTweetsOfFollowingUsers } from '@/lib/actions/tweetActions'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -9,6 +8,16 @@ import { Suspense } from 'react'
 
 const FetchTweets = async () => {
   const tweets = await fetchTweetsOfFollowingUsers()
+  if (tweets.length === 0) {
+    return (
+      <div className='m-8'>
+        <h1 className='text-4xl font-bold'>No tweets to show</h1>
+        <p className='text-white/50 mt-4'>
+          Tweets of users you follow will show up here.
+        </p>
+      </div>
+    )
+  }
   return <TweetsList tweets={tweets} />
 }
 
@@ -42,14 +51,7 @@ const page = () => {
           </span>
         </Link>
       </div>
-      <Link href='/compose/tweet' className='fixed bottom-20 z-20 right-6'>
-        <Button className='mt-4 !bg-blue-500 hover:!bg-blue-600 ease-in-out duration-200 !text-white'>
-          Post
-        </Button>
-      </Link>
-      <Suspense
-        fallback={<Loading className='min-h-[90vh] items-start mt-4' />}
-      >
+      <Suspense fallback={<Loading className='items-start mt-4' />}>
         <FetchTweets />
       </Suspense>
     </div>

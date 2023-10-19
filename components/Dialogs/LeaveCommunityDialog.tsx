@@ -9,7 +9,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from '@/components/ui/dialog'
-import LeaveCommunityButton from './LeaveCommunityButton'
+import LeaveCommunityButton from '../Buttons/LeaveCommunityButton'
 
 const LeaveCommunityDialog = ({
   communityName,

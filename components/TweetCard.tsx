@@ -8,18 +8,19 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import ProfileHoverCard from './ProfileHoverCard'
-import LikeButton from './LikeButton'
+import LikeButton from './Buttons/LikeButton'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import RepostButton from './RepostButton'
+import RepostButton from './Buttons/RepostButton'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import Image from 'next/image'
-import DeleteTweetDialog from './DeleteTweetDialog'
-import NonInteractiveTweetDialog from './NonInteractiveTweetDialog'
+import DeleteTweetDialog from './Dialogs/DeleteTweetDialog'
+import NonInteractiveTweetDialog from './Dialogs/NonInteractiveTweetDialog'
+import { formatDateString } from '@/lib/utils'
 
 const TweetCard = ({ tweet, post, currentUser }: any) => {
   console.log('tweetCard', tweet)
@@ -70,9 +71,10 @@ const TweetCard = ({ tweet, post, currentUser }: any) => {
               </Popover>
             </TooltipProvider>
           </div>
-          <div className='flex space-x-2'>
+          <div className='flex space-x-1 items-center'>
             <p className='opacity-50 line-clamp-1'>{tweet?.author?.username}</p>
-            <p className='opacity-50'>{tweet?.createdAt?.getDate()}</p>
+            <div className='w-1 h-1 shrink-0 rounded-full bg-white/50'></div>
+            <p className='opacity-50'>{formatDateString(tweet?.createdAt)}</p>
           </div>
         </div>
       </div>
@@ -204,6 +206,7 @@ const TweetCard = ({ tweet, post, currentUser }: any) => {
                             <LikeButton
                               tweetId={tweet._id.toString()}
                               liked={currentUser.liked.includes(tweet._id)}
+                              count={tweet.likes.length}
                             />
                           ) : (
                             <NonInteractiveTweetDialog type='like' />
@@ -213,10 +216,8 @@ const TweetCard = ({ tweet, post, currentUser }: any) => {
                         <LikeButton
                           tweetId={tweet._id.toString()}
                           liked={currentUser.liked.includes(tweet._id)}
+                          count={tweet.likes.length}
                         />
-                      )}
-                      {tweet.likes.length > 0 && (
-                        <span className='text-sm'>{tweet?.likes?.length}</span>
                       )}
                     </div>
                   </TooltipTrigger>

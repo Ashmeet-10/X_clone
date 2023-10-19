@@ -40,13 +40,13 @@ const LeftSidebar = async () => {
             <p className='text-white/50'>{userInfo.username}</p>
           </Link>
           <div className='text-white/50 mt-3 mb-5 px-4 flex space-x-3 text-sm'>
-            <Link href={`/profile/${userInfo.id}/followers`}>
-              <span className='text-white'>{userInfo.followers.length}</span>{' '}
-              Followers{' '}
-            </Link>
             <Link href={`/profile/${userInfo.id}/following`}>
               <span className='text-white'>{userInfo.following.length}</span>{' '}
               Following
+            </Link>
+            <Link href={`/profile/${userInfo.id}/followers`}>
+              <span className='text-white'>{userInfo.followers.length}</span>{' '}
+              Followers
             </Link>
           </div>
           <div className='flex flex-col text-xl font-bold'>
@@ -81,7 +81,9 @@ const LeftSidebar = async () => {
           </div>
           <div className='mt-10 px-4'>
             <SignOutButton>
-              <Button className='flex items-center space-x-3 font-semibold'>Log out</Button>
+              <Button className='flex items-center space-x-3 font-semibold'>
+                Log out
+              </Button>
             </SignOutButton>
           </div>
         </div>

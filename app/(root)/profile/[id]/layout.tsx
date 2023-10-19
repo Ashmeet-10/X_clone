@@ -1,16 +1,15 @@
-import BackButton from '@/components/BackButton'
-import FollowButton from '@/components/FollowButton'
+import BackButton from '@/components/Buttons/BackButton'
+import FollowButton from '@/components/Buttons/FollowButton'
 import Loading from '@/components/Loading'
 import ProfileTabs from '@/components/ProfileTabs'
 import { Button } from '@/components/ui/button'
 import { fetchUser } from '@/lib/actions/userActions'
 import { currentUser } from '@clerk/nextjs'
-import { ArrowLeft } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
-const ProfileLayout = async ({
+const Layout = async ({
   children,
   params,
 }: {
@@ -69,7 +68,9 @@ const ProfileLayout = async ({
           <p className='font-bold text-2xl'>{userInfo?.name}</p>
           <p className='opacity-50'>{userInfo?.username}</p>
           <p className='mt-4'>{userInfo.bio}</p>
-          <p className='opacity-50 mt-4 mb-3'>Joined August 2023</p>
+          <p className='opacity-50 mt-4 mb-3'>
+            Joined {userInfo.joinedOn?.toDateString()}
+          </p>
           <div className='text-white/50 mt-3 mb-5 flex space-x-3 text-sm'>
             <Link href={`/profile/${userInfo.id}/following`}>
               <span className='text-white font-bold'>
@@ -94,6 +95,20 @@ const ProfileLayout = async ({
         </Suspense>
       </div>
     </div>
+  )
+}
+
+const ProfileLayout = ({
+  children,
+  params,
+}: {
+  children: React.ReactNode
+  params: { id: string }
+}) => {
+  return (
+    <Suspense fallback={<Loading className='min-h-[80vh] items-center' />}>
+      <Layout children={children} params={params} />
+    </Suspense>
   )
 }
 

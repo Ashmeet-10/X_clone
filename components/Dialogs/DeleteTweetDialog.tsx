@@ -2,14 +2,10 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
   DialogClose,
 } from '@/components/ui/dialog'
-import DeleteTweetButton from './DeleteTweetButton'
+import DeleteTweetButton from '../Buttons/DeleteTweetButton'
 import { Trash2 } from 'lucide-react'
 
 const DeleteTweetDialog = ({ tweetId }: { tweetId: string }) => {

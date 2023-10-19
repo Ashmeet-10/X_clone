@@ -1,14 +1,12 @@
-import BackButton from '@/components/BackButton'
-import JoinCommunityDialog from '@/components/JoinCommunityDialog'
-import LeaveCommunityDialog from '@/components/LeaveCommunityDialog'
+import BackButton from '@/components/Buttons/BackButton'
+import JoinCommunityDialog from '@/components/Dialogs/JoinCommunityDialog'
+import LeaveCommunityDialog from '@/components/Dialogs/LeaveCommunityDialog'
 import Loading from '@/components/Loading'
-import { fetchUser } from '@/lib/actions/userActions'
 import Community from '@/lib/models/community'
+import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
-import { ArrowLeft } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { Suspense } from 'react'
 
 const FetchData = async ({
@@ -30,7 +28,7 @@ const FetchData = async ({
     currentUserInfo,
   ])
   if (!currentuser) return null
-  const user = await fetchUser(currentuser.id)
+  const user = await User.findOne({ id: currentuser.id }).select('communities')
   return (
     <div>
       <div className='flex space-x-10 p-4 font-bold sticky top-0 z-10 bg-black/80 backdrop-blur-md left-0 text-lg items-center'>
@@ -95,7 +93,7 @@ const CommunityLayout = ({
   params: { id: string }
 }) => {
   return (
-    <Suspense fallback={<Loading className='min-h-[90vh] items-center' />}>
+    <Suspense fallback={<Loading className='min-h-[80vh] items-center' />}>
       <FetchData params={params} children={children} />
     </Suspense>
   )

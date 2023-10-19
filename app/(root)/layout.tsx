@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google'
 import Bottombar from '@/components/Bottombar'
 import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
-import PostButton from '@/components/PostButton'
+import PostButton from '@/components/Buttons/PostButton'
 
 const inter = Inter({ subsets: ['latin'] })
 

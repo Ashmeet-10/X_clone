@@ -9,7 +9,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from '@/components/ui/dialog'
-import HeartIconEmpty from './icons/heartEmpty'
+import HeartIconEmpty from '../icons/heartEmpty'
 import { MessageCircle } from 'lucide-react'
 
 const NonInteractiveTweetDialog = ({ type }: { type: string }) => {

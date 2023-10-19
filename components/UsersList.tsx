@@ -1,4 +1,4 @@
-import FollowButton from './FollowButton'
+import FollowButton from './Buttons/FollowButton'
 import ProfileHoverCard from './ProfileHoverCard'
 
 const UsersList = ({ users, currentUser }: any) => {

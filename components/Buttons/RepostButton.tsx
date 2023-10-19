@@ -1,7 +1,7 @@
 'use client'
 
 import { Repeat } from 'lucide-react'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import { usePathname } from 'next/navigation'
 import { repostTweet } from '@/lib/actions/tweetActions'
 

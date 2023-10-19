@@ -1,4 +1,4 @@
-import BackButton from '@/components/BackButton'
+import BackButton from '@/components/Buttons/BackButton'
 import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
 import { Button } from '@/components/ui/button'
@@ -7,7 +7,6 @@ import { fetchUser } from '@/lib/actions/userActions'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
 import { Heart, Search, Sparkles, UserPlus2Icon, Users } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
@@ -70,9 +69,12 @@ const FetchJoinedCommunityTweets = async () => {
       ) : (
         <>
           {tweets.length === 0 ? (
-            <div className='m-4'>
-              <h2 className='text-2xl'>No Community tweets to show</h2>
-            </div>
+            <div className='m-8'>
+            <h1 className='text-4xl font-bold'>No community posts</h1>
+            <p className='text-white/50 mt-4'>
+              When community members will post something, you'll see it here.
+            </p>
+          </div>
           ) : (
             <div className='m-4'>
               <TweetsList tweets={tweets} />
@@ -104,7 +106,7 @@ const page = () => {
         </div>
       </div>
       <Suspense
-        fallback={<Loading className='min-h-[60vh] items-start mt-4' />}
+        fallback={<Loading className='items-start mt-4' />}
       >
         <FetchJoinedCommunityTweets />
       </Suspense>

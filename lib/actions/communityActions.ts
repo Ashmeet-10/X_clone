@@ -5,6 +5,7 @@ import { connectToDB } from '../mongoose'
 import User from '../models/user'
 import Community from '../models/community'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 export async function createCommunity({
   name,
@@ -34,6 +35,7 @@ export async function createCommunity({
     userInfo.communities = [community._id, ...userInfo.communities]
     await userInfo.save()
     revalidatePath('/communities')
+    redirect(`/communities/${community._id}}`)
     console.log(community)
   } catch (error: any) {
     throw new Error(`Error creating community: ${error.message}`)
@@ -73,8 +75,4 @@ export async function joinOrLeaveCommunity(
   } catch (error: any) {
     throw new Error(`Error joining community: ${error.message}`)
   }
-}
-
-export async function fetchUserCommunities(){
-  
 }

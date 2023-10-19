@@ -3,16 +3,15 @@ import UsersList from '@/components/UsersList'
 import { fetchUser } from '@/lib/actions/userActions'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
-import Image from 'next/image'
 import { Suspense } from 'react'
 
 const Followers = async ({ params }: { params: { id: string } }) => {
   connectToDB()
   const currentuser = await currentUser()
   if (!currentuser) return null
-  const user = await fetchUser(params.id)
-  const userInfo = await fetchUser(currentuser.id)
-  await user.populate('followers')
+  const userPromise = fetchUser(params.id)
+  const userInfoPromise = fetchUser(currentuser.id)
+  const [user, userInfo] = await Promise.all([userPromise, userInfoPromise])
   if (user.followers.length === 0) {
     return (
       <div className='m-4 mt-6'>
@@ -26,6 +25,7 @@ const Followers = async ({ params }: { params: { id: string } }) => {
       </div>
     )
   }
+  await user.populate('followers')
   return <UsersList users={user.followers} currentUser={userInfo} />
 }
 

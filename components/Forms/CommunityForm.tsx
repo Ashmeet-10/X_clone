@@ -20,7 +20,7 @@ import { isBase64Image } from '@/lib/utils'
 import { useUploadThing } from '@/lib/uploadthing'
 import { usePathname, useRouter } from 'next/navigation'
 import { communityValidation } from '@/lib/validations/communityValidation'
-import { Textarea } from './ui/textarea'
+import { Textarea } from '../ui/textarea'
 import { createCommunity } from '@/lib/actions/communityActions'
 
 const CommunityForm = () => {

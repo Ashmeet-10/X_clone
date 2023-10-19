@@ -1,8 +1,6 @@
-import BackButton from '@/components/BackButton'
-import CommunityForm from '@/components/CommunityForm'
+import BackButton from '@/components/Buttons/BackButton'
+import CommunityForm from '@/components/Forms/CommunityForm'
 import Loading from '@/components/Loading'
-import { ArrowLeft } from 'lucide-react'
-import Image from 'next/image'
 import { Suspense } from 'react'
 
 const page = () => {
@@ -13,7 +11,7 @@ const page = () => {
         <span>Create a Community</span>
       </div>
       <div className='m-4'>
-        <Suspense fallback={<Loading className='min-h-[90vh] items-start' />}>
+        <Suspense fallback={<Loading className='items-start' />}>
           <CommunityForm />
         </Suspense>
       </div>

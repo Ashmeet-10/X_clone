@@ -6,7 +6,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   if (tweets.length === 0) {
     return (
       <div className='m-4 mt-6'>
-        <h1 className='text-3xl font-bold'>This account is have no post yet.</h1>
+        <h1 className='text-3xl font-bold'>This account have no post yet.</h1>
         <p className='text-white/50 mt-4'>
           When this account will post something, they'll show up here.
         </p>

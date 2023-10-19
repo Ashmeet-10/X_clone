@@ -16,22 +16,24 @@ export async function fetchUser(userId: string) {
 }
 
 export async function updateUser({
-  userId,
   name,
   bio,
   image,
   username,
 }: {
-  userId: string
   name: string
   bio: string
   image: string
   username: string
 }) {
   try {
-    connectToDB()
+    const database = connectToDB()
+    const userData = currentUser()
+    const [db, user] = await Promise.all([database, userData])
+    if (!user) throw new Error('No user found')
+
     await User.findOneAndUpdate(
-      { id: userId },
+      { id: user.id },
       {
         name: name,
         bio: bio,
@@ -71,8 +73,8 @@ export async function followOrUnfollowUser(userId: string, pathname: string) {
       const promise2 = userToFollow?.save()
       await Promise.all([promise1, promise2])
     } else {
-      userWantToFollow?.following.push(userToFollow._id)
-      userToFollow?.followers.push(userWantToFollow._id)
+      userWantToFollow.following = [userToFollow._id, ...userWantToFollow.following]
+      userToFollow.followers = [userWantToFollow._id, ...userToFollow.followers]
       const promise1 = userWantToFollow?.save()
       const promise2 = userToFollow?.save()
       await Promise.all([promise1, promise2])

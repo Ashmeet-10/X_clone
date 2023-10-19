@@ -28,7 +28,7 @@ const Home = () => {
           href='/'
           className='w-1/2 hover:bg-zinc-900 ease-in-out duration-200 flex justify-center items-center'
         >
-          <span className='border-b-4 border-blue-500 flex font-semibold justify-center items-center h-full '>
+          <span className='border-b-4 border-blue-500 flex font-semibold justify-center items-center h-full'>
             For you
           </span>
         </Link>
@@ -41,9 +41,7 @@ const Home = () => {
           </span>
         </Link>
       </div>
-      <Suspense
-        fallback={<Loading className='min-h-[90vh] items-start mt-4' />}
-      >
+      <Suspense fallback={<Loading className='items-start mt-4' />}>
         <FetchTweets />
       </Suspense>
     </div>
