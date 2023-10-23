@@ -17,18 +17,15 @@ const FetchData = async ({
   params: { id: string }
 }) => {
   const database = connectToDB()
+  const currentUserInfo = currentUser()
+  const [db, currentuser] = await Promise.all([database, currentUserInfo])
+  if (!currentuser) return null
+  const userInfo = User.findOne({ id: currentuser.id }).select('communities')
   const communityInfo = Community.findById(params.id).populate({
     path: 'members',
     select: 'image',
   })
-  const currentUserInfo = currentUser()
-  const [db, community, currentuser] = await Promise.all([
-    database,
-    communityInfo,
-    currentUserInfo,
-  ])
-  if (!currentuser) return null
-  const user = await User.findOne({ id: currentuser.id }).select('communities')
+  const [user, community] = await Promise.all([userInfo, communityInfo])
   return (
     <div>
       <div className='flex space-x-10 p-4 font-bold sticky top-0 z-10 bg-black/80 backdrop-blur-md left-0 text-lg items-center'>
@@ -39,6 +36,7 @@ const FetchData = async ({
         <Image
           src={community.profileImage}
           fill
+          quality={90}
           priority
           className='object-cover'
           alt='community profile image'

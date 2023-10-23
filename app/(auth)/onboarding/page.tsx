@@ -7,7 +7,7 @@ const page = async () => {
   const user = await currentUser()
   if (!user) return null
   const userInfo = await User.findOne({ id: user.id }).select('name username bio image onboarded')
-  if (userInfo.onboarded) redirect('/')
+  if (userInfo?.onboarded) redirect('/')
   const userData = {
     id: user.id,
     name: userInfo ? userInfo?.name : user.firstName + ' ' + user.lastName,

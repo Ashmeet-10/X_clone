@@ -9,7 +9,7 @@ const BackButton = () => {
   return (
     <Button
       onClick={() => router.back()}
-      className='m-0 p-0 !bg-black !text-white'
+      className='m-0 p-0 !bg-transparent !text-white'
     >
       <ArrowLeft className='w-6 h-6' />
     </Button>

@@ -1,8 +1,9 @@
 import Tweet from '@/lib/models/tweet'
-import { BarChart2, Heart, MessageCircle, Repeat } from 'lucide-react'
+import { BarChart2, MessageCircle, Repeat } from 'lucide-react'
 import ProfileHoverCard from './ProfileHoverCard'
 import Link from 'next/link'
 import LikeButton from './Buttons/LikeButton'
+import User from '@/lib/models/user'
 
 type Reply = {
   _id: string

@@ -4,6 +4,7 @@ import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
 import { Suspense } from 'react'
+import Community from '@/lib/models/community'
 
 const CreateTweet = async () => {
   const database = connectToDB()

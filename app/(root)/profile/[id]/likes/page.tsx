@@ -17,17 +17,15 @@ const LikedTweets = async ({ params }: { params: { id: string } }) => {
       </div>
     )
   }
-  return (
-    <div>
-      <TweetsList tweets={likedTweets} />
-    </div>
-  )
+  return <TweetsList tweets={likedTweets} />
 }
 
 const page = ({ params }: { params: { id: string } }) => {
   return (
     <Suspense fallback={<Loading className='min-h-[60vh] items-start' />}>
-      <LikedTweets params={params} />
+      <div className='min-h-[60vh]'>
+        <LikedTweets params={params} />
+      </div>
     </Suspense>
   )
 }

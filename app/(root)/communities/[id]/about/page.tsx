@@ -1,7 +1,7 @@
 import Loading from '@/components/Loading'
 import UsersList from '@/components/UsersList'
-import { fetchUser } from '@/lib/actions/userActions'
 import Community from '@/lib/models/community'
+import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
 import { CalendarDays, Globe, Users } from 'lucide-react'
@@ -27,7 +27,7 @@ const AboutCommunity = async ({ params }: { params: { id: string } }) => {
   ])
   console.log(community)
   if (!currentuser) return null
-  const user = await fetchUser(currentuser.id)
+  const user = await User.findOne({ id: currentuser.id }).select('following')
   return (
     <div className=''>
       <div className='border-b border-white/30 p-4'>
@@ -99,7 +99,9 @@ const page = ({ params }: { params: { id: string } }) => {
       <Suspense
         fallback={<Loading className='min-h-[60vh] items-start mt-4' />}
       >
-        <AboutCommunity params={params} />
+        <div className='min-h-[60vh]'>
+          <AboutCommunity params={params} />
+        </div>
       </Suspense>
     </>
   )

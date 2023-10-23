@@ -1,4 +1,5 @@
 import TweetForm from '@/components/Forms/TweetForm'
+import Community from '@/lib/models/community'
 import Tweet from '@/lib/models/tweet'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'

@@ -1,5 +1,4 @@
 import BackButton from '@/components/Buttons/BackButton'
-import LeftSidebar from '@/components/LeftSidebar'
 
 const page = () => {
   return (
@@ -9,7 +8,11 @@ const page = () => {
         <span>Notifications</span>
       </div>
       <div className='m-8'>
-        <h1 className='text-4xl font-bold'>No Notifications for now</h1>
+        <h1 className='text-4xl font-bold'>Nothing to see here — yet</h1>
+        <p className='text-white/50 mt-4'>
+          From likes to reposts and a whole lot more, this is where all the
+          action happens.
+        </p>
       </div>
     </>
   )

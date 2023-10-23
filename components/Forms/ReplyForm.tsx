@@ -57,13 +57,13 @@ const ReplyForm = ({ user, tweetId, interactiveTweet }: Props) => {
         </div>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='flex items-center'
+          className='flex items-center justify-between w-full'
         >
           <FormField
             control={form.control}
             name='tweet'
             render={({ field }) => (
-              <FormItem>
+              <FormItem className='w-full'>
                 <FormControl>
                   <Input
                     placeholder='Post your reply!'

@@ -106,7 +106,7 @@ const TweetForm = ({ user, tweet, communities }: Props) => {
               className='rounded-full'
             />
           </div>
-          <div className='space-y-8'>
+          <div className='w-full space-y-8'>
             <FormField
               control={form.control}
               name='viewer'

@@ -3,7 +3,7 @@ import FollowButton from '@/components/Buttons/FollowButton'
 import Loading from '@/components/Loading'
 import ProfileTabs from '@/components/ProfileTabs'
 import { Button } from '@/components/ui/button'
-import { fetchUser } from '@/lib/actions/userActions'
+import User from '@/lib/models/user'
 import { currentUser } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -18,8 +18,12 @@ const Layout = async ({
 }) => {
   const currentuser = await currentUser()
   if (!currentuser) return null
-  const currentUserPromise = fetchUser(currentuser.id)
-  const userPromise = fetchUser(params.id)
+  const currentUserPromise = User.findOne({ id: currentuser.id }).select(
+    'following'
+  )
+  const userPromise = User.findOne({ id: params.id }).select(
+    'name username image id following followers bio joinedOn tweets'
+  )
   const [currentUserInfo, userInfo] = await Promise.all([
     currentUserPromise,
     userPromise,
@@ -89,11 +93,10 @@ const Layout = async ({
         <div className='mb-4 -ml-4'>
           <ProfileTabs userId={params.id} />
         </div>
-
-        <Suspense fallback={<Loading className='min-h-[60vh] items-start' />}>
-          {children}
-        </Suspense>
       </div>
+      <Suspense fallback={<Loading className='min-h-[60vh] items-start' />}>
+        <div className='min-h-[60vh]'>{children}</div>
+      </Suspense>
     </div>
   )
 }

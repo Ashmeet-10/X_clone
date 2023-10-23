@@ -26,7 +26,7 @@ const TweetCard = ({ tweet, post, currentUser }: any) => {
   console.log('tweetCard', tweet)
   console.log('currentUser', currentUser.communities)
   return (
-    <div className={`border-b border-white/30 ${post && 'text-lg'}`}>
+    <div className={`px-4 border-b border-white/30 ${post && 'text-lg'}`}>
       {tweet?.repostedBy.includes(currentUser._id) ? (
         <p className='text-sm'>{tweet.author.name} Reposted</p>
       ) : null}

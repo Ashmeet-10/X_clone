@@ -3,7 +3,6 @@ import LikeButton from '@/components/Buttons/LikeButton'
 import ReplyForm from '@/components/Forms/ReplyForm'
 import TweetCard from '@/components/TweetCard'
 import { fetchTweetByTweetId } from '@/lib/actions/tweetActions'
-import { fetchUser } from '@/lib/actions/userActions'
 import { currentUser } from '@clerk/nextjs'
 import { Edit, MessageCircle, Repeat } from 'lucide-react'
 import Link from 'next/link'
@@ -23,6 +22,8 @@ import NonInteractiveTweetDialog from '@/components/Dialogs/NonInteractiveTweetD
 import BackButton from '@/components/Buttons/BackButton'
 import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
+import User from '@/lib/models/user'
+import Tweet from '@/lib/models/tweet'
 
 const Replies = async ({ tweet }: { tweet: any }) => {
   const replies = await tweet.populate({
@@ -35,19 +36,21 @@ const Replies = async ({ tweet }: { tweet: any }) => {
   return <TweetsList tweets={replies.replies} />
 }
 
-const Tweet = async ({ params }: { params: { id: string } }) => {
+const TweetData = async ({ params }: { params: { id: string } }) => {
   const currentuser = await currentUser()
   if (!currentuser) return null
-  const userInfo = fetchUser(currentuser.id)
+  const userInfo = User.findOne({ id: currentuser.id }).select(
+    'liked bookmarked communities image'
+  )
   const tweetInfo = fetchTweetByTweetId(params.id)
   const [user, tweet] = await Promise.all([userInfo, tweetInfo])
   return (
     <div className='relative'>
-      <div className='mx-4'>
-        <div className=''>
+      <div className=''>
+        <div>
           <TweetCard tweet={tweet} post={true} currentUser={user} />
         </div>
-        <div className='text-sm flex border-b border-white/30 pb-5 mt-5 flex-wrap'>
+        <div className='text-sm flex border-b border-white/30 px-4 pb-5 mt-5 flex-wrap'>
           <Link
             href={`/tweet/${params.id}/reposts`}
             className='flex space-x-1 mr-4'
@@ -181,7 +184,7 @@ const Tweet = async ({ params }: { params: { id: string } }) => {
             />
           </div>
         </div>
-        <div className='mt-4 border-b border-white/30 pb-4'>
+        <div className='mt-4 px-4 border-b border-white/30 pb-4'>
           <ReplyForm
             user={{
               image: user.image,
@@ -214,7 +217,7 @@ const page = ({ params }: { params: { id: string } }) => {
         <span>Post</span>
       </div>
       <Suspense fallback={<Loading className='items-start' />}>
-        <Tweet params={params} />
+        <TweetData params={params} />
       </Suspense>
     </>
   )

@@ -1,11 +1,11 @@
 import { currentUser } from '@clerk/nextjs'
 import TweetCard from './TweetCard'
-import { fetchUser } from '@/lib/actions/userActions'
+import User from '@/lib/models/user'
 
 const TweetsList = async ({ tweets }: any) => {
   const user = await currentUser()
   if (!user) return null
-  const userInfo = await fetchUser(user.id)
+  const userInfo = await User.findOne({id:user.id}).select('communities id liked')
   return (
     <div className='flex flex-col space-y-4'>
       {tweets.map((tweet: any) => (

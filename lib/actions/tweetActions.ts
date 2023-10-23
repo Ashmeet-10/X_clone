@@ -79,6 +79,7 @@ export async function fetchCommunityTweetsForCurrentUser() {
         populate: [
           {
             path: 'author',
+            select: 'name username image id following followers bio',
           },
           {
             path: 'quotedTweetId',
@@ -143,6 +144,7 @@ export async function fetchTweetsByUserId(userId: string) {
       populate: [
         {
           path: 'author',
+          select: 'name username image id following followers bio',
         },
         {
           path: 'quotedTweetId',
@@ -167,6 +169,7 @@ export async function fetchLikedTweetsByUserId(userId: string) {
       populate: [
         {
           path: 'author',
+          select: 'name username image id following followers bio',
         },
         {
           path: 'quotedTweetId',

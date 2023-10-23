@@ -1,18 +1,16 @@
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { SignOutButton, currentUser } from '@clerk/nextjs'
-import { Bookmark, LogOutIcon, Settings, User2, Users } from 'lucide-react'
+import { Bookmark, Settings, User2, Users } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from './ui/button'
-import { fetchUser } from '@/lib/actions/userActions'
-import { redirect } from 'next/navigation'
+import User from '@/lib/models/user'
 
 const LeftSidebar = async () => {
   const user = await currentUser()
   if (!user) return null
-  const userInfo = await fetchUser(user.id)
+  const userInfo = await User.findOne({ id: user.id }).select('name username id image following followers')
 
-  if (!userInfo) return redirect('/onboarding')
   return (
     <Sheet>
       <SheetTrigger>

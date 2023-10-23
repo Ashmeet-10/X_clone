@@ -14,7 +14,7 @@ const ProfileHoverCard = async ({ author }: any) => {
   if (!user) return null
   const userInfo = await User.findOne({ id: user.id }).select('following')
   return (
-    <HoverCard>
+    <HoverCard openDelay={200}>
       <HoverCardTrigger asChild>
         <Link href={`/profile/${author?.id}`}>
           <div className='relative w-11 h-11 shrink-0'>

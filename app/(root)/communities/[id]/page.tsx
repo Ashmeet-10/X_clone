@@ -1,6 +1,8 @@
 import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
 import Community from '@/lib/models/community'
+import Tweet from '@/lib/models/tweet'
+import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -45,7 +47,7 @@ const Tweets = async ({ params }: { params: { id: string } }) => {
     )
   }
   return (
-    <div className='m-4'>
+    <div className='my-4'>
       <TweetsList tweets={community.posts} />
     </div>
   )
@@ -75,7 +77,9 @@ const page = ({ params }: { params: { id: string } }) => {
       <Suspense
         fallback={<Loading className='min-h-[60vh] items-start mt-4' />}
       >
-        <Tweets params={params} />
+        <div className='min-h-[60vh]'>
+          <Tweets params={params} />
+        </div>
       </Suspense>
     </>
   )

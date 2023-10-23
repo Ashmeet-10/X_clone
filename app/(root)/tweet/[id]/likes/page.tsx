@@ -1,7 +1,6 @@
 import BackButton from '@/components/Buttons/BackButton'
 import Loading from '@/components/Loading'
 import UsersList from '@/components/UsersList'
-import { fetchUser } from '@/lib/actions/userActions'
 import Tweet from '@/lib/models/tweet'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'

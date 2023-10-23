@@ -3,7 +3,7 @@ import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
 import { Button } from '@/components/ui/button'
 import { fetchCommunityTweetsForCurrentUser } from '@/lib/actions/tweetActions'
-import { fetchUser } from '@/lib/actions/userActions'
+import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
 import { Heart, Search, Sparkles, UserPlus2Icon, Users } from 'lucide-react'
@@ -15,7 +15,7 @@ const FetchJoinedCommunityTweets = async () => {
   const currentUserInfo = currentUser()
   const [db, currentuser] = await Promise.all([database, currentUserInfo])
   if (!currentuser) return null
-  const userInfo = fetchUser(currentuser.id)
+  const userInfo = User.findOne({ id: currentuser.id }).select('communities')
   const tweetsInfo = fetchCommunityTweetsForCurrentUser()
   const [user, tweets] = await Promise.all([userInfo, tweetsInfo])
   return (
@@ -76,7 +76,7 @@ const FetchJoinedCommunityTweets = async () => {
             </p>
           </div>
           ) : (
-            <div className='m-4'>
+            <div className='my-4'>
               <TweetsList tweets={tweets} />
             </div>
           )}

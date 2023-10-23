@@ -2,6 +2,7 @@ import BackButton from '@/components/Buttons/BackButton'
 import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
 import Tweet from '@/lib/models/tweet'
+import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
 import { Suspense } from 'react'
@@ -39,7 +40,7 @@ const Quotes = async ({ params }: { params: { id: string } }) => {
           </p>
         </div>
       ) : (
-        <div className='m-4'>
+        <div className='my-4'>
           <TweetsList tweets={tweet.quotes} />
         </div>
       )}
