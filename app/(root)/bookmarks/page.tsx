@@ -4,9 +4,11 @@ import TweetsList from '@/components/TweetsList'
 import Tweet from '@/lib/models/tweet'
 import User from '@/lib/models/user'
 import { currentUser } from '@clerk/nextjs'
+import { unstable_noStore } from 'next/cache'
 import { Suspense } from 'react'
 
 const FetchData = async () => {
+  unstable_noStore()
   const currentuser = await currentUser()
   if (!currentuser) return null
   const currentUserInfo = await User.findOne({ id: currentuser.id })

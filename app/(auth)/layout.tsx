@@ -1,11 +1,10 @@
 import { ThemeProvider } from '@/components/ThemeProvider'
 import '../globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { GeistSans } from 'geist/font/sans'
 import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
-
-const inter = Inter({ subsets: ['latin'] })
+import { unstable_noStore } from 'next/cache'
 
 export const metadata: Metadata = {
   title: 'Twitter',
@@ -17,11 +16,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  unstable_noStore()
   return (
     <ClerkProvider appearance={{ baseTheme: dark }}>
       <html lang='en'>
-        <body className={`${inter.className} bg-black text-white`}>
-          <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
+        <body className={`${GeistSans.className} bg-black text-white`}>
+          <ThemeProvider attribute='class' defaultTheme='dark'>
             <div className=''>{children}</div>
           </ThemeProvider>
         </body>

@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import { Button } from '../ui/button'
 import { followOrUnfollowUser } from '@/lib/actions/userActions'
-import { experimental_useOptimistic as useOptimistic } from 'react'
+import { useOptimistic } from 'react'
 
 type Props = {
   userId: string

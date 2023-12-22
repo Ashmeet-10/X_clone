@@ -1,15 +1,16 @@
 import { ThemeProvider } from '@/components/ThemeProvider'
 import '../globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { GeistSans } from 'geist/font/sans'
 import Bottombar from '@/components/Bottombar'
 import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
 import PostButton from '@/components/Buttons/PostButton'
 import LeftMenu from '@/components/LeftMenu'
 import Rightbar from '@/components/Rightbar'
-
-const inter = Inter({ subsets: ['latin'] })
+import { unstable_noStore } from 'next/cache'
+import { Suspense } from 'react'
+import Loading from '@/components/Loading'
 
 export const metadata: Metadata = {
   title: 'Twitter',
@@ -21,10 +22,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  unstable_noStore()
   return (
     <ClerkProvider appearance={{ baseTheme: dark }}>
       <html lang='en'>
-        <body className={`${inter.className} bg-black text-white`}>
+        <body className={`${GeistSans.className} bg-black text-white`}>
           <ThemeProvider
             attribute='class'
             defaultTheme='dark'
@@ -33,7 +35,9 @@ export default function RootLayout({
             <div className='flex mx-auto max-w-2xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl'>
               <div className='hidden xs:block'><LeftMenu /></div>
               <div className='w-full min-h-screen max-w-[630px] xs:border xs:border-white/30'>
-                {children}
+                <Suspense fallback={<Loading className='items-center min-h-[90vh]' />}>
+                  {children}
+                </Suspense>
                 <div className='sm:hidden'><PostButton /></div>
                 <div className='xs:hidden mt-24'><Bottombar /></div>
               </div>

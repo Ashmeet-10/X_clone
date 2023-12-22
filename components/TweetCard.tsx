@@ -23,8 +23,6 @@ import NonInteractiveTweetDialog from './Dialogs/NonInteractiveTweetDialog'
 import { formatDateString } from '@/lib/utils'
 
 const TweetCard = ({ tweet, post, currentUser }: any) => {
-  console.log('tweetCard', tweet)
-  console.log('currentUser', currentUser.communities)
   return (
     <div className={`px-4 border-b border-white/30 ${post && 'text-lg'}`}>
       {tweet?.repostedBy.includes(currentUser._id) ? (

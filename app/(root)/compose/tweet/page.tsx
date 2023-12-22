@@ -5,6 +5,7 @@ import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
 import { Suspense } from 'react'
 import Community from '@/lib/models/community'
+import { unstable_noStore } from 'next/cache'
 
 const CreateTweet = async () => {
   const database = connectToDB()
@@ -28,8 +29,9 @@ const CreateTweet = async () => {
 }
 
 const page = () => {
+  unstable_noStore()
   return (
-    <Suspense fallback={<Loading className='min-h-[80vh] items-center' />}>
+    <Suspense fallback={<Loading className='min-h-[90vh] items-center' />}>
       <CreateTweet />
     </Suspense>
   )

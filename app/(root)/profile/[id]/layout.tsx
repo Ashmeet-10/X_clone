@@ -5,6 +5,7 @@ import ProfileTabs from '@/components/ProfileTabs'
 import { Button } from '@/components/ui/button'
 import User from '@/lib/models/user'
 import { currentUser } from '@clerk/nextjs'
+import { unstable_noStore } from 'next/cache'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -108,8 +109,9 @@ const ProfileLayout = ({
   children: React.ReactNode
   params: { id: string }
 }) => {
+  unstable_noStore()
   return (
-    <Suspense fallback={<Loading className='min-h-[80vh] items-center' />}>
+    <Suspense fallback={<Loading className='min-h-[90vh] items-center' />}>
       <Layout children={children} params={params} />
     </Suspense>
   )

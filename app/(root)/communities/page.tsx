@@ -7,6 +7,7 @@ import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
 import { Heart, Search, Sparkles, UserPlus2Icon, Users } from 'lucide-react'
+import { unstable_noStore } from 'next/cache'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
@@ -87,6 +88,7 @@ const FetchJoinedCommunityTweets = async () => {
 }
 
 const page = () => {
+  unstable_noStore()
   return (
     <>
       <div className='p-4 font-bold sticky top-0 z-10 bg-black/80 backdrop-blur-md left-0 text-lg'>

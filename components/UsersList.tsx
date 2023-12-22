@@ -4,8 +4,8 @@ import ProfileHoverCard from './ProfileHoverCard'
 const UsersList = ({ users, currentUser }: any) => {
   return (
     <div>
-      {users.map((user: any) => (
-        <div className='py-4'>
+      {users.map((user: any, idx:number) => (
+        <div key={idx} className='py-4'>
           <div className='flex items-center space-x-2'>
             <ProfileHoverCard author={user} />
             <div className='flex justify-between items-center space-x-2 w-full'>

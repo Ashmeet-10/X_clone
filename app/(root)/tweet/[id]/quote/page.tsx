@@ -1,11 +1,15 @@
 import TweetForm from '@/components/Forms/TweetForm'
+import Loading from '@/components/Loading'
 import Community from '@/lib/models/community'
 import Tweet from '@/lib/models/tweet'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
+import { unstable_noStore } from 'next/cache'
+import { Suspense } from 'react'
 
-const page = async ({ params }: { params: { id: string } }) => {
+const QuoteTweet = async ({ params }: { params: { id: string } }) => {
+  unstable_noStore()
   const database = connectToDB()
   const currentUserInfo = currentUser()
   const [db, currentuser] = await Promise.all([database, currentUserInfo])
@@ -32,6 +36,15 @@ const page = async ({ params }: { params: { id: string } }) => {
         communities={JSON.parse(JSON.stringify(user.communities))}
       />
     </div>
+  )
+}
+
+const page = ({ params }: { params: { id: string } }) => {
+  unstable_noStore()
+  return (
+    <Suspense fallback={<Loading className='min-h-[90vh] items-center' />}>
+      <QuoteTweet params={params} />
+    </Suspense>
   )
 }
 

@@ -3,6 +3,7 @@ import UsersList from '@/components/UsersList'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
+import { unstable_noStore } from 'next/cache'
 import { Suspense } from 'react'
 
 const Followers = async ({ params }: { params: { id: string } }) => {
@@ -33,6 +34,7 @@ const Followers = async ({ params }: { params: { id: string } }) => {
 }
 
 const page = ({ params }: { params: { id: string } }) => {
+  unstable_noStore()
   return (
     <Suspense fallback={<Loading className='min-h-[60vh] items-start' />}>
       <div className='min-h-[60vh] px-4'>

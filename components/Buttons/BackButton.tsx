@@ -8,6 +8,7 @@ const BackButton = () => {
   const router = useRouter()
   return (
     <Button
+      type='button'
       onClick={() => router.back()}
       className='m-0 p-0 !bg-transparent !text-white'
     >

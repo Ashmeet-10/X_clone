@@ -17,18 +17,20 @@ const Users = async () => {
     .select('name username image id following followers bio')
     .limit(4)
   return (
-    <div className='flex flex-col justify-center border border-white/40 shadow-[-1px_-1px_1px_0px] shadow-white/60 p-4 rounded-2xl'>
-      <h2 className='text-2xl font-bold'>People you might know</h2>
-      <div className='space-y-4 mt-6'>
-        {users.map((user, idx) => (
-          <div key={idx} className='flex space-x-3 py-2 items-center'>
-            <ProfileHoverCard author={user} />
-            <Link href={`/profile/${user.id}`} className=''>
-              <p className='font-bold line-clamp-1'>{user.name}</p>
-              <p className='opacity-50 line-clamp-1'>{user.username}</p>
-            </Link>
-          </div>
-        ))}
+    <div className='p-0.5 rounded-xl bg-gradient-to-br from-white/70 via-white/10 to-white/10'>
+      <div className='flex flex-col justify-center p-4 bg-black rounded-lg rounded-tl-[6px]'>
+        <h2 className='text-2xl font-bold'>People you might know</h2>
+        <div className='space-y-4 mt-6'>
+          {users.map((user, idx) => (
+            <div key={idx} className='flex space-x-3 py-2 items-center'>
+              <ProfileHoverCard author={user} />
+              <Link href={`/profile/${user.id}`} className=''>
+                <p className='font-bold line-clamp-1'>{user.name}</p>
+                <p className='opacity-50 line-clamp-1'>{user.username}</p>
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
@@ -40,29 +42,31 @@ const Communities = async () => {
     .select('name profileImage members')
     .limit(4)
   return (
-    <div className='flex flex-col justify-center border border-white/40 shadow-[-1px_-1px_1px_0px] shadow-white/60 p-4 rounded-2xl'>
-      <h2 className='text-2xl font-bold mb-6'>Communities</h2>
-      {communities.map((community, idx) => (
-        <Link key={idx} href={`/communities/${community._id}`}>
-          <div className='flex space-x-4 py-2 items-center'>
-            <div className='relative w-16 h-16 shrink-0'>
-              <Image
-                src={community.profileImage}
-                fill
-                className='rounded-xl object-cover'
-                alt='community profile image'
-              />
+    <div className='p-0.5 rounded-xl bg-gradient-to-br from-white/70 via-white/10 to-white/10'>
+      <div className='flex flex-col justify-center p-4 bg-black rounded-lg rounded-tl-[6px]'>
+        <h2 className='text-2xl font-bold mb-6'>Communities</h2>
+        {communities.map((community, idx) => (
+          <Link key={idx} href={`/communities/${community._id}`}>
+            <div className='flex space-x-4 py-2 items-center'>
+              <div className='relative w-16 h-16 shrink-0'>
+                <Image
+                  src={community.profileImage}
+                  fill
+                  className='rounded-xl object-cover'
+                  alt='community profile image'
+                />
+              </div>
+              <div className=''>
+                <p className='font-bold line-clamp-1'>{community.name}</p>
+                <p className='line-clamp-1 space-x-1'>
+                  <span className='font-bold'>{community.members.length}</span>
+                  <span className='opacity-50'>members</span>
+                </p>
+              </div>
             </div>
-            <div className=''>
-              <p className='font-bold line-clamp-1'>{community.name}</p>
-              <p className='line-clamp-1 space-x-1'>
-                <span className='font-bold'>{community.members.length}</span>
-                <span className='opacity-50'>members</span>
-              </p>
-            </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        ))}
+      </div>
     </div>
   )
 }

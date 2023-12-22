@@ -24,6 +24,7 @@ import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
 import User from '@/lib/models/user'
 import Tweet from '@/lib/models/tweet'
+import { unstable_noStore } from 'next/cache'
 
 const Replies = async ({ tweet }: { tweet: any }) => {
   const replies = await tweet.populate({
@@ -210,6 +211,7 @@ const TweetData = async ({ params }: { params: { id: string } }) => {
 }
 
 const page = ({ params }: { params: { id: string } }) => {
+  unstable_noStore()
   return (
     <>
       <div className='flex space-x-10 font-bold sticky top-0 z-10 bg-black/80 backdrop-blur-md left-0 p-4 text-lg items-center'>

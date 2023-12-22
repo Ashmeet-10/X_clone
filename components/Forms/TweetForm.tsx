@@ -138,6 +138,7 @@ const TweetForm = ({ user, tweet, communities }: Props) => {
                         <>
                           {communities?.map((community: any, idx: number) => (
                             <SelectItem
+                              key={idx}
                               className='font-semibold mt-2 border border-white/40 rounded-md line-clamp-1'
                               value={`${community.name}`}
                             >

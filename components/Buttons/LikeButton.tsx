@@ -5,7 +5,7 @@ import { Button } from '../ui/button'
 import { usePathname } from 'next/navigation'
 import HeartIconEmpty from '../icons/heartEmpty'
 import HeartIconFilled from '../icons/heartFilled'
-import { experimental_useOptimistic as useOptimistic } from 'react'
+import { useOptimistic } from 'react'
 
 type Props = {
   tweetId: string

@@ -6,6 +6,7 @@ import Community from '@/lib/models/community'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
+import { unstable_noStore } from 'next/cache'
 import Image from 'next/image'
 import { Suspense } from 'react'
 
@@ -90,8 +91,9 @@ const CommunityLayout = ({
   children: React.ReactNode
   params: { id: string }
 }) => {
+  unstable_noStore()
   return (
-    <Suspense fallback={<Loading className='min-h-[80vh] items-center' />}>
+    <Suspense fallback={<Loading className='min-h-[90vh] items-center' />}>
       <FetchData params={params} children={children} />
     </Suspense>
   )

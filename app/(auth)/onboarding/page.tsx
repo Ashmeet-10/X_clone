@@ -1,9 +1,11 @@
 import AccountProfile from '@/components/Forms/AccountProfile'
 import User from '@/lib/models/user'
 import { currentUser } from '@clerk/nextjs'
+import { unstable_noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 const page = async () => {
+  unstable_noStore()
   const user = await currentUser()
   if (!user) return null
   const userInfo = await User.findOne({ id: user.id }).select('name username bio image onboarded')

@@ -5,7 +5,7 @@ import { Button } from '../ui/button'
 import BookmarkedIcon from '../icons/bookmarked'
 import BookmarkIcon from '../icons/bookmark'
 import { bookmarkOrUnbookmarkTweet } from '@/lib/actions/tweetActions'
-import { experimental_useOptimistic as useOptimistic } from 'react'
+import { useOptimistic } from 'react'
 
 type Props = {
   tweetId: string
