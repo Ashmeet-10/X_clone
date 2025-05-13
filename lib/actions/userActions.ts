@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache'
 
 export async function fetchUser(userId: string) {
   try {
-    connectToDB()
+    await connectToDB()
     const userInfo = await User.findOne({ id: userId })
     return userInfo
   } catch (error: any) {

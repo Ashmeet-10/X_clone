@@ -1,12 +1,10 @@
 import HomeTabs from '@/components/HomeTabs'
 import LeftSidebar from '@/components/LeftSidebar'
 import Loading from '@/components/Loading'
-import { unstable_noStore } from 'next/cache'
 import Image from 'next/image'
 import { Suspense } from 'react'
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
-  unstable_noStore()
   return (
     <div>
       <div className='flex px-4 w-full h-16 justify-center items-center z-20 xs:hidden'>

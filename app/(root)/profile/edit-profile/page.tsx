@@ -4,7 +4,6 @@ import Loading from '@/components/Loading'
 import User from '@/lib/models/user'
 import { currentUser } from '@clerk/nextjs'
 import { Suspense } from 'react'
-import { unstable_noStore } from 'next/cache'
 
 const EditProfile = async () => {
   const user = await currentUser()
@@ -25,7 +24,6 @@ const EditProfile = async () => {
 }
 
 const page = () => {
-  unstable_noStore()
   return (
     <div>
       <div className='flex space-x-10 p-4 font-bold sticky top-0 z-10 bg-black/80 backdrop-blur-md left-0 text-lg items-center'>

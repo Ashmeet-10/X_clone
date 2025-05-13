@@ -67,7 +67,7 @@ const AccountProfile = ({ user }: Props) => {
       image: values.image,
     })
 
-    if (pathname === '/profile/edit') router.back()
+    if (pathname === '/profile/edit-profile') router.back()
     else router.push('/')
   }
 
@@ -96,7 +96,14 @@ const AccountProfile = ({ user }: Props) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className={`space-y-8 ${
+          pathname !== '/profile/edit-profile'
+            ? 'max-w-md mx-auto border border-gray-700 rounded-lg p-6 bg-black/80 backdrop-blur-md'
+            : ''
+        }`}
+      >
         <FormField
           control={form.control}
           name='image'

@@ -5,12 +5,11 @@ import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
 import { CalendarDays, Globe, Users } from 'lucide-react'
-import { unstable_noStore } from 'next/cache'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
 const AboutCommunity = async ({ params }: { params: { id: string } }) => {
-  connectToDB()
+  await connectToDB()
   const communityInfo = Community.findById(params.id)
     .select('rules createdBy members createdAt')
     .populate({
@@ -77,7 +76,6 @@ const AboutCommunity = async ({ params }: { params: { id: string } }) => {
 }
 
 const page = ({ params }: { params: { id: string } }) => {
-  unstable_noStore()
   return (
     <>
       <div className='flex h-14 border-b border-white/30 ease-in-out duration-300'>

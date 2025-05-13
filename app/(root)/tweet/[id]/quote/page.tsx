@@ -5,11 +5,9 @@ import Tweet from '@/lib/models/tweet'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
-import { unstable_noStore } from 'next/cache'
 import { Suspense } from 'react'
 
 const QuoteTweet = async ({ params }: { params: { id: string } }) => {
-  unstable_noStore()
   const database = connectToDB()
   const currentUserInfo = currentUser()
   const [db, currentuser] = await Promise.all([database, currentUserInfo])
@@ -40,7 +38,6 @@ const QuoteTweet = async ({ params }: { params: { id: string } }) => {
 }
 
 const page = ({ params }: { params: { id: string } }) => {
-  unstable_noStore()
   return (
     <Suspense fallback={<Loading className='min-h-[90vh] items-center' />}>
       <QuoteTweet params={params} />

@@ -28,7 +28,7 @@ export async function createTweet({ text }: { text: string }) {
 
 export async function fetchTweetByTweetId(tweetId: string) {
   try {
-    connectToDB()
+    await connectToDB()
     const tweet = await Tweet.findById(tweetId)
       .populate('author')
       .populate({
@@ -46,7 +46,7 @@ export async function fetchTweetByTweetId(tweetId: string) {
 
 export async function fetchTweets() {
   try {
-    connectToDB()
+    await connectToDB()
     const tweets = await Tweet.find({ parentId: null, community: null })
       .sort({ createdAt: 'desc' })
       .populate({
@@ -138,7 +138,7 @@ export async function fetchTweetsOfFollowingUsers() {
 
 export async function fetchTweetsByUserId(userId: string) {
   try {
-    connectToDB()
+    await connectToDB()
     const user = await User.findOne({ id: userId }).populate({
       path: 'tweets',
       populate: [
@@ -163,7 +163,7 @@ export async function fetchTweetsByUserId(userId: string) {
 
 export async function fetchLikedTweetsByUserId(userId: string) {
   try {
-    connectToDB()
+    await connectToDB()
     const user = await User.findOne({ id: userId }).populate({
       path: 'liked',
       populate: [
