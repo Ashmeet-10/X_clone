@@ -6,16 +6,23 @@ import { currentUser } from '@clerk/nextjs'
 import { Suspense } from 'react'
 
 const FollowingUsers = async ({ params }: { params: { id: string } }) => {
-  connectToDB()
-  const currentuser = await currentUser()
-  if (!currentuser) return null
-  const userPromise = User.findOne({ id: params.id })
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([
+    connectDbPromise,
+    currentUserPromise,
+  ])
+  if (!currentUserData) return null
+  const profileUserPromise = User.findOne({ id: params.id })
     .select('following')
     .populate('following')
-  const userInfoPromise = User.findOne({ id: currentuser.id }).select(
-    'following'
-  )
-  const [user, userInfo] = await Promise.all([userPromise, userInfoPromise])
+  const currentUserInfoPromise = User.findOne({
+    id: currentUserData.id,
+  }).select('following')
+  const [user, userInfo] = await Promise.all([
+    profileUserPromise,
+    currentUserInfoPromise,
+  ])
   if (user.following.length === 0) {
     return (
       <div className='m-4 mt-6'>

@@ -9,11 +9,11 @@ import Community from '../models/community'
 
 export async function createTweet({ text }: { text: string }) {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = await User.findOne({ id: currentuser.id })
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = await User.findOne({ id: currentUserData.id })
     const tweet = await Tweet.create({
       text: text,
       author: userInfo._id,
@@ -67,11 +67,11 @@ export async function fetchTweets() {
 }
 export async function fetchCommunityTweetsForCurrentUser() {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = await User.findOne({ id: currentuser.id }).populate({
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = await User.findOne({ id: currentUserData.id }).populate({
       path: 'communities',
       select: 'posts',
       populate: {
@@ -107,11 +107,11 @@ export async function fetchCommunityTweetsForCurrentUser() {
 
 export async function fetchTweetsOfFollowingUsers() {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = await User.findOne({ id: currentuser.id }).select(
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = await User.findOne({ id: currentUserData.id }).select(
       'following'
     )
     const tweets = await Tweet.find({
@@ -194,11 +194,11 @@ export async function createReply({
   tweetId: string
 }) {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = await User.findOne({ id: currentuser.id })
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = await User.findOne({ id: currentUserData.id })
     const tweetInfo = Tweet.findById(tweetId)
     const replyInfo = Tweet.create({
       text: text,
@@ -216,11 +216,11 @@ export async function createReply({
 
 export async function likeTweet(tweetId: string, pathname: string) {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = User.findOne({ id: currentuser.id })
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = User.findOne({ id: currentUserData.id })
     const tweetInfo = Tweet.findById(tweetId)
     const [user, tweet] = await Promise.all([userInfo, tweetInfo])
     if (!user.liked.includes(tweetId)) user.liked = [tweetId, ...user.liked]
@@ -242,11 +242,11 @@ export async function likeTweet(tweetId: string, pathname: string) {
 
 export async function repostTweet(tweetId: string, pathname: string) {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = User.findOne({ id: currentuser.id })
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = User.findOne({ id: currentUserData.id })
     const tweetInfo = Tweet.findById(tweetId)
     const [user, tweet] = await Promise.all([userInfo, tweetInfo])
     if (tweet.repostedBy.includes(user._id)) {
@@ -274,11 +274,11 @@ export async function quoteTweet({
   quotedTweetId: string
 }) {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = User.findOne({ id: currentuser.id })
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = User.findOne({ id: currentUserData.id })
     const quotedTweetInfo = Tweet.findById(quotedTweetId)
     const [user, quotedTweet] = await Promise.all([userInfo, quotedTweetInfo])
     const tweet = await Tweet.create({
@@ -309,11 +309,11 @@ export async function quoteTweetInCommunity({
   communityId: string
 }) {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = User.findOne({ id: currentuser.id })
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = User.findOne({ id: currentUserData.id })
     const quotedTweetInfo = Tweet.findById(quotedTweetId)
     const communityInfo = Community.findById(communityId)
     const [user, quotedTweet, community] = await Promise.all([
@@ -364,11 +364,11 @@ export async function bookmarkOrUnbookmarkTweet(
   pathname: string
 ) {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = User.findOne({ id: currentuser.id })
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = User.findOne({ id: currentUserData.id })
     const tweetInfo = Tweet.findById(tweetId)
     const [user, tweet] = await Promise.all([userInfo, tweetInfo])
     if (user.bookmarked.includes(tweetId)) {
@@ -399,11 +399,11 @@ export async function createCommunityTweet({
   communityName: string
 }) {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = User.findOne({ id: currentuser.id })
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = User.findOne({ id: currentUserData.id })
     const communityInfo = Community.findOne({ name: communityName })
     const [user, community] = await Promise.all([userInfo, communityInfo])
     const tweet = await Tweet.create({
@@ -444,11 +444,11 @@ export async function createCommunityTweet({
 
 export async function deleteTweet(tweetId: string, pathname: string) {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = User.findOne({ id: currentuser.id }).select('tweets')
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = User.findOne({ id: currentUserData.id }).select('tweets')
     const tweetInfo = Tweet.findById(tweetId)
       .populate({ path: 'likes', select: 'liked' })
       .populate({ path: 'repostedBy', select: 'reposted' })

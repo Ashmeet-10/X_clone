@@ -3,18 +3,21 @@ import BackButton from '@/components/Buttons/BackButton'
 import Loading from '@/components/Loading'
 import User from '@/lib/models/user'
 import { currentUser } from '@clerk/nextjs'
+import { connectToDB } from '@/lib/mongoose'
 import { Suspense } from 'react'
 
 const EditProfile = async () => {
-  const user = await currentUser()
-  if (!user) return null
-  const userInfo = await User.findOne({ id: user.id }).select('name username bio image onboarded')
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const userInfo = await User.findOne({ id: currentUserData.id }).select('name username bio image onboarded')
   const userData = {
-    id: user.id,
-    name: userInfo ? userInfo?.name : user.firstName + ' ' + user.lastName,
-    username: userInfo ? userInfo?.username : user.username,
+    id: currentUserData.id,
+    name: userInfo ? userInfo?.name : currentUserData.firstName + ' ' + currentUserData.lastName,
+    username: userInfo ? userInfo?.username : currentUserData.username,
     bio: userInfo ? userInfo?.bio : '',
-    image: userInfo ? userInfo?.image : user.imageUrl,
+    image: userInfo ? userInfo?.image : currentUserData.imageUrl,
   }
   return (
     <div className='m-6'>

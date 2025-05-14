@@ -7,11 +7,11 @@ import { Suspense } from 'react'
 import Community from '@/lib/models/community'
 
 const CreateTweet = async () => {
-  const database = connectToDB()
-  const currentUserInfo = currentUser()
-  const [db, currentuser] = await Promise.all([database, currentUserInfo])
-  if (!currentuser) return null
-  const user = await User.findOne({ id: currentuser.id })
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const user = await User.findOne({ id: currentUserData.id })
     .select('image communities')
     .populate('communities')
   return (

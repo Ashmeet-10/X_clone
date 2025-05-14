@@ -5,18 +5,21 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from './ui/button'
 import User from '@/lib/models/user'
+import { connectToDB } from '@/lib/mongoose'
 
 const LeftSidebar = async () => {
-  const user = await currentUser()
-  if (!user) return null
-  const userInfo = await User.findOne({ id: user.id }).select('name username id image following followers')
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const userInfo = await User.findOne({ id: currentUserData.id }).select('name username id image following followers')
 
   return (
     <Sheet>
       <SheetTrigger>
         <div className='relative w-8 h-8 flex items-center'>
           <Image
-            src={userInfo?.image || user.imageUrl}
+            src={userInfo?.image || currentUserData.imageUrl}
             fill
             className='rounded-full'
             alt='profile-photo'
@@ -25,10 +28,10 @@ const LeftSidebar = async () => {
       </SheetTrigger>
       <SheetContent side='left' className='!bg-black px-0'>
         <div className='flex flex-col h-full'>
-          <Link href={`/profile/${user.id}`} className='px-4'>
+          <Link href={`/profile/${currentUserData.id}`} className='px-4'>
             <div className='relative w-14 aspect-square flex items-center'>
               <Image
-                src={userInfo?.image || user.imageUrl}
+                src={userInfo?.image || currentUserData.imageUrl}
                 fill
                 className='rounded-full'
                 alt='profile-photo'
@@ -49,7 +52,7 @@ const LeftSidebar = async () => {
           </div>
           <div className='flex flex-col text-xl font-bold'>
             <Link
-              href={`/profile/${user.id}`}
+              href={`/profile/${currentUserData.id}`}
               className='flex items-center space-x-6 hover:bg-zinc-900 p-4 ease-in-out duration-200'
             >
               <User2 size={25} />

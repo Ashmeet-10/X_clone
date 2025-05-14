@@ -8,15 +8,15 @@ import { currentUser } from '@clerk/nextjs'
 import { Suspense } from 'react'
 
 const UsersReposted = async ({ params }: { params: { id: string } }) => {
-  const database = connectToDB()
-  const currentUserInfo = currentUser()
-  const [db, currentuser] = await Promise.all([database, currentUserInfo])
-  if (!currentuser) return null
-  const userInfo = User.findOne({ id: currentuser.id }).select('following')
-  const tweetInfo = Tweet.findById(params.id)
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const currentUserInfoPromise = User.findOne({ id: currentUserData.id }).select('following')
+  const tweetInfoPromise = Tweet.findById(params.id)
     .select('repostedBy')
     .populate('repostedBy')
-  const [user, tweet] = await Promise.all([userInfo, tweetInfo])
+  const [user, tweet] = await Promise.all([currentUserInfoPromise, tweetInfoPromise])
   return (
     <>
       {tweet.repostedBy.length === 0 ? (

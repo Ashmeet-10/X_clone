@@ -16,16 +16,16 @@ const FetchData = async ({
   children: React.ReactNode
   params: { id: string }
 }) => {
-  const database = connectToDB()
-  const currentUserInfo = currentUser()
-  const [db, currentuser] = await Promise.all([database, currentUserInfo])
-  if (!currentuser) return null
-  const userInfo = User.findOne({ id: currentuser.id }).select('communities')
-  const communityInfo = Community.findById(params.id).populate({
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const userInfoPromise = User.findOne({ id: currentUserData.id }).select('communities')
+  const communityInfoPromise = Community.findById(params.id).populate({
     path: 'members',
     select: 'image',
   })
-  const [user, community] = await Promise.all([userInfo, communityInfo])
+  const [user, community] = await Promise.all([userInfoPromise, communityInfoPromise])
   return (
     <div>
       <div className='flex space-x-10 p-4 font-bold sticky top-0 z-10 bg-black/80 backdrop-blur-md left-0 text-lg items-center'>

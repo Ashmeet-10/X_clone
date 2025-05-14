@@ -8,11 +8,14 @@ import Link from 'next/link'
 import { currentUser } from '@clerk/nextjs'
 import FollowButton from './Buttons/FollowButton'
 import User from '@/lib/models/user'
+import { connectToDB } from '@/lib/mongoose'
 
 const ProfileHoverCard = async ({ author }: any) => {
-  const user = await currentUser()
-  if (!user) return null
-  const userInfo = await User.findOne({ id: user.id }).select('following')
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const userInfo = await User.findOne({ id: currentUserData.id }).select('following')
   return (
     <HoverCard openDelay={200}>
       <HoverCardTrigger asChild>
@@ -38,7 +41,7 @@ const ProfileHoverCard = async ({ author }: any) => {
                 className='rounded-full'
               />
             </div>
-            {user.id !== author.id ? (
+            {currentUserData.id !== author.id ? (
               <FollowButton
                 userId={author.id}
                 followed={userInfo.following.includes(author._id)}

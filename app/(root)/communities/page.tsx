@@ -11,13 +11,13 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 
 const FetchJoinedCommunityTweets = async () => {
-  const database = connectToDB()
-  const currentUserInfo = currentUser()
-  const [db, currentuser] = await Promise.all([database, currentUserInfo])
-  if (!currentuser) return null
-  const userInfo = User.findOne({ id: currentuser.id }).select('communities')
-  const tweetsInfo = fetchCommunityTweetsForCurrentUser()
-  const [user, tweets] = await Promise.all([userInfo, tweetsInfo])
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const userPromise = User.findOne({ id: currentUserData.id }).select('communities')
+  const tweetsPromise = fetchCommunityTweetsForCurrentUser()
+  const [user, tweets] = await Promise.all([userPromise, tweetsPromise])
   return (
     <div>
       {user.communities.length === 0 ? (

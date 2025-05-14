@@ -19,11 +19,11 @@ export async function createCommunity({
   image: string
 }) {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = await User.findOne({ id: currentuser.id })
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = await User.findOne({ id: currentUserData.id })
     const community = await Community.create({
       name: name,
       purpose: purpose,
@@ -47,11 +47,11 @@ export async function joinOrLeaveCommunity(
   pathname: string
 ) {
   try {
-    const database = connectToDB()
-    const currentUserInfo = currentUser()
-    const [db, currentuser] = await Promise.all([database, currentUserInfo])
-    if (!currentuser) throw new Error('No user found')
-    const userInfo = User.findOne({ id: currentuser.id })
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
+    const userInfo = User.findOne({ id: currentUserData.id })
     const communityInfo = Community.findById(communityId)
     const [user, community] = await Promise.all([userInfo, communityInfo])
     //leave community

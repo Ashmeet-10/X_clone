@@ -13,6 +13,7 @@ import Loading from '@/components/Loading'
 import { connectToDB } from '@/lib/mongoose'
 import User from '@/lib/models/user'
 import { redirect } from 'next/navigation'
+import { Analytics } from '@vercel/analytics/next'
 
 export const metadata: Metadata = {
   title: 'Twitter',
@@ -24,11 +25,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const database = connectToDB()
-  const currentUserInfo = currentUser()
-  const [db, currentuser] = await Promise.all([database, currentUserInfo])
-  if (!currentuser) return null
-  const userInfo = await User.findOne({ id: currentuser.id }).select('onboarded')
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const userInfo = await User.findOne({ id: currentUserData.id }).select('onboarded')
   if (!userInfo) return redirect('/onboarding')
   return (
     <ClerkProvider appearance={{ baseTheme: dark }}>
@@ -48,6 +49,7 @@ export default async function RootLayout({
                   fallback={<Loading className='items-center min-h-[90vh]' />}
                 >
                   {children}
+                  <Analytics />
                 </Suspense>
                 <div className='sm:hidden'>
                   <PostButton />

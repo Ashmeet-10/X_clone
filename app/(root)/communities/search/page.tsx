@@ -2,6 +2,7 @@ import BackButton from '@/components/Buttons/BackButton'
 import Loading from '@/components/Loading'
 import SearchBar from '@/components/SearchBar'
 import Community from '@/lib/models/community'
+import { connectToDB } from '@/lib/mongoose'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -11,27 +12,29 @@ const Communities = async ({
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
 }) => {
+  await connectToDB()
   let communities = []
   if (searchParams.q) {
     communities = await Community.find({
       name: { $regex: searchParams.q, $options: 'i' },
     }).select('name profileImage members')
-  } else
+  } else {
     communities = await Community.find({}).select('name profileImage members')
+  }
 
-    if(!searchParams.q && communities.length === 0) {
-      return (
-        <div className='mx-6 mt-8 space-y-4'>
-          <h1 className='text-4xl font-extrabold opacity-90'>
-            No Communities to show
-          </h1>
-          <p className='opacity-50'>
-            Currently there are no communities, if you want to create one, click
-            on the create community button.
-          </p>
-        </div>
-      )
-    }
+  if (!searchParams.q && communities.length === 0) {
+    return (
+      <div className='mx-6 mt-8 space-y-4'>
+        <h1 className='text-4xl font-extrabold opacity-90'>
+          No Communities to show
+        </h1>
+        <p className='opacity-50'>
+          Currently there are no communities, if you want to create one, click
+          on the create community button.
+        </p>
+      </div>
+    )
+  }
 
   return (
     <div className=''>

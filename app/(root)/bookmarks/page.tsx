@@ -4,12 +4,15 @@ import TweetsList from '@/components/TweetsList'
 import Tweet from '@/lib/models/tweet'
 import User from '@/lib/models/user'
 import { currentUser } from '@clerk/nextjs'
+import { connectToDB } from '@/lib/mongoose'
 import { Suspense } from 'react'
 
 const FetchData = async () => {
-  const currentuser = await currentUser()
-  if (!currentuser) return null
-  const currentUserInfo = await User.findOne({ id: currentuser.id })
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const currentUserInfo = await User.findOne({ id: currentUserData.id })
     .select('bookmarked')
     .populate({
       path: 'bookmarked',

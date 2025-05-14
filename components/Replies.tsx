@@ -4,6 +4,7 @@ import ProfileHoverCard from './ProfileHoverCard'
 import Link from 'next/link'
 import LikeButton from './Buttons/LikeButton'
 import User from '@/lib/models/user'
+import { connectToDB } from '@/lib/mongoose'
 
 type Reply = {
   _id: string
@@ -31,6 +32,7 @@ const Replies = async ({
   tweetId: string
   likedTweets: [string]
 }) => {
+  await connectToDB()
   const tweet = await Tweet.findById(tweetId).populate({
     path: 'replies',
     populate: {

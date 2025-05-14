@@ -5,18 +5,18 @@ import { currentUser } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
 const page = async () => {
-  const database = connectToDB()
-  const currentUserInfo = currentUser()
-  const [db, user] = await Promise.all([database, currentUserInfo])
-  if (!user) return null
-  const userInfo = await User.findOne({ id: user.id }).select('name username bio image onboarded')
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const userInfo = await User.findOne({ id: currentUserData.id }).select('name username bio image onboarded')
   if (userInfo?.onboarded) redirect('/')
   const userData = {
-    id: user.id,
-    name: userInfo ? userInfo?.name : user.firstName + ' ' + user.lastName,
-    username: userInfo ? '@' + userInfo?.username : '@' + user.username,
+    id: currentUserData.id,
+    name: userInfo ? userInfo?.name : currentUserData.firstName + ' ' + currentUserData.lastName,
+    username: userInfo ? '@' + userInfo?.username : '@' + currentUserData.username,
     bio: userInfo ? userInfo?.bio : '',
-    image: userInfo ? userInfo?.image : user.imageUrl,
+    image: userInfo ? userInfo?.image : currentUserData.imageUrl,
   }
   return (
     <div className='m-6'>

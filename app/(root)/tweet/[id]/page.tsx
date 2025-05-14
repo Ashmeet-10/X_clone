@@ -24,8 +24,10 @@ import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
 import User from '@/lib/models/user'
 import Tweet from '@/lib/models/tweet'
+import { connectToDB } from '@/lib/mongoose'
 
 const Replies = async ({ tweet }: { tweet: any }) => {
+  await connectToDB()
   const replies = await tweet.populate({
     path: 'replies',
     populate: {
@@ -37,13 +39,15 @@ const Replies = async ({ tweet }: { tweet: any }) => {
 }
 
 const TweetData = async ({ params }: { params: { id: string } }) => {
-  const currentuser = await currentUser()
-  if (!currentuser) return null
-  const userInfo = User.findOne({ id: currentuser.id }).select(
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const userPromise = User.findOne({ id: currentUserData.id }).select(
     'liked bookmarked communities image'
   )
-  const tweetInfo = fetchTweetByTweetId(params.id)
-  const [user, tweet] = await Promise.all([userInfo, tweetInfo])
+  const tweetPromise = fetchTweetByTweetId(params.id)
+  const [user, tweet] = await Promise.all([userPromise, tweetPromise])
   return (
     <div className='relative'>
       <div className=''>

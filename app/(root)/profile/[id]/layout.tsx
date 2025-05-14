@@ -4,6 +4,7 @@ import Loading from '@/components/Loading'
 import ProfileTabs from '@/components/ProfileTabs'
 import { Button } from '@/components/ui/button'
 import User from '@/lib/models/user'
+import { connectToDB } from '@/lib/mongoose'
 import { currentUser } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -16,16 +17,18 @@ const Layout = async ({
   children: React.ReactNode
   params: { id: string }
 }) => {
-  const currentuser = await currentUser()
-  if (!currentuser) return null
-  const currentUserPromise = User.findOne({ id: currentuser.id }).select(
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const currentUserInfoPromise = User.findOne({ id: currentUserData.id }).select(
     'following'
   )
   const userPromise = User.findOne({ id: params.id }).select(
     'name username image id following followers bio joinedOn tweets'
   )
   const [currentUserInfo, userInfo] = await Promise.all([
-    currentUserPromise,
+    currentUserInfoPromise,
     userPromise,
   ])
   return (
@@ -49,7 +52,7 @@ const Layout = async ({
             className='rounded-full'
           />
         </div>
-        {currentuser.id === userInfo?.id ? (
+        {currentUserData.id === userInfo?.id ? (
           <div className='absolute top-4 right-4'>
             <Link href='/profile/edit-profile'>
               <Button

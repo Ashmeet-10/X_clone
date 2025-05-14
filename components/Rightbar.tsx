@@ -9,11 +9,11 @@ import Loading from './Loading'
 import { currentUser } from '@clerk/nextjs'
 
 const Users = async () => {
-  const database = connectToDB()
-  const currentuserInfo = currentUser()
-  const [db, currentuser] = await Promise.all([database, currentuserInfo])
-  if (!currentuser) return null
-  const users = await User.find({ id: { $ne: currentuser.id } })
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const users = await User.find({ id: { $ne: currentUserData.id } })
     .select('name username image id following followers bio')
     .limit(4)
   return (

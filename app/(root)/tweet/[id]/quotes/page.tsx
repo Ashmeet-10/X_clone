@@ -8,10 +8,10 @@ import { currentUser } from '@clerk/nextjs'
 import { Suspense } from 'react'
 
 const Quotes = async ({ params }: { params: { id: string } }) => {
-  const database = connectToDB()
-  const currentUserInfo = currentUser()
-  const [db, currentuser] = await Promise.all([database, currentUserInfo])
-  if (!currentuser) return null
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
   const tweet = await Tweet.findById(params.id).populate([
     {
       path: 'quotes',

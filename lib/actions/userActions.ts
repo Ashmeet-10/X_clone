@@ -27,13 +27,13 @@ export async function updateUser({
   username: string
 }) {
   try {
-    const database = connectToDB()
-    const userData = currentUser()
-    const [db, user] = await Promise.all([database, userData])
-    if (!user) throw new Error('No user found')
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) throw new Error('No user found')
 
     await User.findOneAndUpdate(
-      { id: user.id },
+      { id: currentUserData.id },
       {
         name: name,
         bio: bio,
@@ -50,13 +50,13 @@ export async function updateUser({
 
 export async function followOrUnfollowUser(userId: string, pathname: string) {
   try {
-    const database = connectToDB()
-    const userData = currentUser()
-    const [db, user] = await Promise.all([database, userData])
-    if (!user) {
+    const connectDbPromise = connectToDB()
+    const currentUserPromise = currentUser()
+    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    if (!currentUserData) {
       throw new Error('No user found')
     }
-    const userWantToFollowInfo = User.findOne({ id: user.id })
+    const userWantToFollowInfo = User.findOne({ id: currentUserData.id })
     const userToFollowInfo = User.findOne({ id: userId })
     const [userWantToFollow, userToFollow] = await Promise.all([
       userWantToFollowInfo,

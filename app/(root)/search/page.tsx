@@ -3,6 +3,7 @@ import Loading from '@/components/Loading'
 import ProfileHoverCard from '@/components/ProfileHoverCard'
 import SearchBar from '@/components/SearchBar'
 import User from '@/lib/models/user'
+import { connectToDB } from '@/lib/mongoose'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
@@ -12,6 +13,7 @@ const Users = async ({
   searchParams: { [key: string]: string | string[] | undefined }
 }) => {
   let users = []
+  await connectToDB()
   if (searchParams.q) {
     users = await User.find({
       $or: [

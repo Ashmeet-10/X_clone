@@ -8,21 +8,21 @@ import { currentUser } from '@clerk/nextjs'
 import { Suspense } from 'react'
 
 const QuoteTweet = async ({ params }: { params: { id: string } }) => {
-  const database = connectToDB()
-  const currentUserInfo = currentUser()
-  const [db, currentuser] = await Promise.all([database, currentUserInfo])
-  if (!currentuser) return null
-  const userInfo = User.findOne({ id: currentuser.id })
+  const connectDbPromise = connectToDB()
+  const currentUserPromise = currentUser()
+  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+  if (!currentUserData) return null
+  const userInfoPromise = User.findOne({ id: currentUserData.id })
     .select('image communities')
     .populate({
       path: 'communities',
       select: 'name',
     })
-  const tweetInfo = Tweet.findById(params.id).select('author text').populate({
+  const tweetInfoPromise = Tweet.findById(params.id).select('author text').populate({
     path: 'author',
     select: 'image name username',
   })
-  const [user, tweet] = await Promise.all([userInfo, tweetInfo])
+  const [user, tweet] = await Promise.all([userInfoPromise, tweetInfoPromise])
   return (
     <div className='m-4'>
       <TweetForm
