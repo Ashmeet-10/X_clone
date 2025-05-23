@@ -3,7 +3,7 @@ import UsersList from '@/components/UsersList'
 import Community from '@/lib/models/community'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import { CalendarDays, Globe, Users } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -75,7 +75,8 @@ const AboutCommunity = async ({ params }: { params: { id: string } }) => {
   )
 }
 
-const page = ({ params }: { params: { id: string } }) => {
+const page = async (props: { params: Promise<{ id: string }> }) => {
+  const params = await props.params;
   return (
     <>
       <div className='flex h-14 border-b border-white/30 ease-in-out duration-300'>

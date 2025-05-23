@@ -3,7 +3,7 @@ import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
 import Tweet from '@/lib/models/tweet'
 import User from '@/lib/models/user'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import { connectToDB } from '@/lib/mongoose'
 import { Suspense } from 'react'
 

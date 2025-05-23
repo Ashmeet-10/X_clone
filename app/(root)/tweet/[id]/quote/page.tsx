@@ -4,7 +4,7 @@ import Community from '@/lib/models/community'
 import Tweet from '@/lib/models/tweet'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import { Suspense } from 'react'
 
 const QuoteTweet = async ({ params }: { params: { id: string } }) => {
@@ -37,7 +37,8 @@ const QuoteTweet = async ({ params }: { params: { id: string } }) => {
   )
 }
 
-const page = ({ params }: { params: { id: string } }) => {
+const page = async (props: { params: Promise<{ id: string }> }) => {
+  const params = await props.params;
   return (
     <Suspense fallback={<Loading className='min-h-[90vh] items-center' />}>
       <QuoteTweet params={params} />

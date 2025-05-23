@@ -17,9 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider appearance={{ baseTheme: dark }}>
-      <html lang='en'>
+      <html lang='en' suppressHydrationWarning>
         <body className={`${GeistSans.className} bg-black text-white`}>
-          <ThemeProvider attribute='class' defaultTheme='dark'>
+          <ThemeProvider attribute='class' defaultTheme='dark' enableSystem={false}>
             <div className=''>{children}</div>
           </ThemeProvider>
         </body>

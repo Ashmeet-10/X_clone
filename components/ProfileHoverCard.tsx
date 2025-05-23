@@ -5,7 +5,7 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
 import Link from 'next/link'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import FollowButton from './Buttons/FollowButton'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'

@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import Tweet from '../models/tweet'
 import { connectToDB } from '../mongoose'
 import User from '../models/user'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import Community from '../models/community'
 
 export async function createTweet({ text }: { text: string }) {

@@ -5,7 +5,7 @@ import Loading from '@/components/Loading'
 import Community from '@/lib/models/community'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import Image from 'next/image'
 import { Suspense } from 'react'
 
@@ -83,13 +83,18 @@ const FetchData = async ({
   )
 }
 
-const CommunityLayout = ({
-  children,
-  params,
-}: {
-  children: React.ReactNode
-  params: { id: string }
-}) => {
+const CommunityLayout = async (
+  props: {
+    children: React.ReactNode
+    params: Promise<{ id: string }>
+  }
+) => {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   return (
     <Suspense fallback={<Loading className='min-h-[90vh] items-center' />}>
       <FetchData params={params} children={children} />

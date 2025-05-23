@@ -1,6 +1,6 @@
 'use server'
 
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import { connectToDB } from '../mongoose'
 import User from '../models/user'
 import Community from '../models/community'

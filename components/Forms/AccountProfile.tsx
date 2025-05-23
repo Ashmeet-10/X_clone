@@ -22,6 +22,7 @@ import { useUploadThing } from '@/lib/uploadthing'
 import { usePathname, useRouter } from 'next/navigation'
 import { updateUser } from '@/lib/actions/userActions'
 import { Textarea } from '../ui/textarea'
+import { useUser } from '@clerk/nextjs'
 
 type Props = {
   user: {
@@ -38,6 +39,7 @@ const AccountProfile = ({ user }: Props) => {
   const [files, setFiles] = useState<File[]>([])
   const { startUpload } = useUploadThing('media')
   const pathname = usePathname()
+  const { user:userHook } = useUser()
   const form = useForm({
     resolver: zodResolver(userValidation),
     defaultValues: {
@@ -68,7 +70,10 @@ const AccountProfile = ({ user }: Props) => {
     })
 
     if (pathname === '/profile/edit-profile') router.back()
-    else router.push('/')
+    else {
+      await userHook?.reload()
+      router.push('/')
+    }
   }
 
   const handleImage = (

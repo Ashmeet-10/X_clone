@@ -3,6 +3,8 @@ import TweetsList from '@/components/TweetsList'
 import { fetchTweetsOfFollowingUsers } from '@/lib/actions/tweetActions'
 import { Suspense } from 'react'
 
+export const dynamic = 'force-dynamic'
+
 const FetchTweets = async () => {
   const tweets = await fetchTweetsOfFollowingUsers()
   if (tweets.length === 0) {

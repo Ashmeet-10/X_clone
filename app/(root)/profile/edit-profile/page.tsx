@@ -2,7 +2,7 @@ import AccountProfile from '@/components/Forms/AccountProfile'
 import BackButton from '@/components/Buttons/BackButton'
 import Loading from '@/components/Loading'
 import User from '@/lib/models/user'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import { connectToDB } from '@/lib/mongoose'
 import { Suspense } from 'react'
 

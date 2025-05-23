@@ -1,11 +1,12 @@
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { SignOutButton, currentUser } from '@clerk/nextjs'
+import { SignOutButton } from '@clerk/nextjs'
 import { Bookmark, Settings, User2, Users } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from './ui/button'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
+import { currentUser } from '@clerk/nextjs/server'
 
 const LeftSidebar = async () => {
   const connectDbPromise = connectToDB()

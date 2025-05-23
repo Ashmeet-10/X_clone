@@ -9,7 +9,7 @@ import { useInView } from 'react-intersection-observer'
 
 const ProfileTabs = ({ userId }: { userId: string }) => {
   const pathname = usePathname()
-  const elementRef = useRef<any>()
+  const elementRef = useRef<any>(null)
   const [ref1, inView1] = useInView({ threshold: 0.9 })
   const [ref2, inView2] = useInView({ threshold: 0.9 })
   return (

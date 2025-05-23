@@ -3,7 +3,7 @@ import LikeButton from '@/components/Buttons/LikeButton'
 import ReplyForm from '@/components/Forms/ReplyForm'
 import TweetCard from '@/components/TweetCard'
 import { fetchTweetByTweetId } from '@/lib/actions/tweetActions'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import { Edit, MessageCircle, Repeat } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -213,7 +213,8 @@ const TweetData = async ({ params }: { params: { id: string } }) => {
   )
 }
 
-const page = ({ params }: { params: { id: string } }) => {
+const page = async (props: { params: Promise<{ id: string }> }) => {
+  const params = await props.params;
   return (
     <>
       <div className='flex space-x-10 font-bold sticky top-0 z-10 bg-black/80 backdrop-blur-md left-0 p-4 text-lg items-center'>

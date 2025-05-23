@@ -2,7 +2,7 @@ import Loading from '@/components/Loading'
 import TweetForm from '@/components/Forms/TweetForm'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import { Suspense } from 'react'
 import Community from '@/lib/models/community'
 

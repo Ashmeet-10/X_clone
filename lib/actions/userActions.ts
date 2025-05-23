@@ -1,6 +1,6 @@
 'use server'
 
-import { currentUser } from '@clerk/nextjs'
+import { clerkClient, currentUser } from '@clerk/nextjs/server'
 import User from '../models/user'
 import { connectToDB } from '../mongoose'
 import { revalidatePath } from 'next/cache'
@@ -26,13 +26,17 @@ export async function updateUser({
   image: string
   username: string
 }) {
+  const client = await clerkClient()
   try {
     const connectDbPromise = connectToDB()
     const currentUserPromise = currentUser()
-    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    const [db, currentUserData] = await Promise.all([
+      connectDbPromise,
+      currentUserPromise,
+    ])
     if (!currentUserData) throw new Error('No user found')
 
-    await User.findOneAndUpdate(
+    const promise1 = User.findOneAndUpdate(
       { id: currentUserData.id },
       {
         name: name,
@@ -43,6 +47,13 @@ export async function updateUser({
       },
       { upsert: true }
     )
+    const promise2 = client.users.updateUser(currentUserData.id, {
+      publicMetadata: {
+        onboardingComplete: true,
+      },
+    })
+    await Promise.all([promise1, promise2])
+    revalidatePath('/profile')
   } catch (error: any) {
     throw new Error(`Error updating user info: ${error.message}`)
   }
@@ -52,7 +63,10 @@ export async function followOrUnfollowUser(userId: string, pathname: string) {
   try {
     const connectDbPromise = connectToDB()
     const currentUserPromise = currentUser()
-    const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
+    const [db, currentUserData] = await Promise.all([
+      connectDbPromise,
+      currentUserPromise,
+    ])
     if (!currentUserData) {
       throw new Error('No user found')
     }
@@ -73,7 +87,10 @@ export async function followOrUnfollowUser(userId: string, pathname: string) {
       const promise2 = userToFollow?.save()
       await Promise.all([promise1, promise2])
     } else {
-      userWantToFollow.following = [userToFollow._id, ...userWantToFollow.following]
+      userWantToFollow.following = [
+        userToFollow._id,
+        ...userWantToFollow.following,
+      ]
       userToFollow.followers = [userWantToFollow._id, ...userToFollow.followers]
       const promise1 = userWantToFollow?.save()
       const promise2 = userToFollow?.save()

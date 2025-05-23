@@ -6,7 +6,7 @@ import Community from '@/lib/models/community'
 import Image from 'next/image'
 import { Suspense } from 'react'
 import Loading from './Loading'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 
 const Users = async () => {
   const connectDbPromise = connectToDB()

@@ -20,7 +20,8 @@ const LikedTweets = async ({ params }: { params: { id: string } }) => {
   return <TweetsList tweets={likedTweets} />
 }
 
-const page = ({ params }: { params: { id: string } }) => {
+const page = async (props: { params: Promise<{ id: string }> }) => {
+  const params = await props.params;
   return (
     <Suspense fallback={<Loading className='min-h-[60vh] items-start' />}>
       <div className='min-h-[60vh]'>

@@ -53,7 +53,8 @@ const Tweets = async ({ params }: { params: { id: string } }) => {
   )
 }
 
-const page = ({ params }: { params: { id: string } }) => {
+const page = async (props: { params: Promise<{ id: string }> }) => {
+  const params = await props.params;
   return (
     <>
       <div className='flex h-14 border-b border-white/30 ease-in-out duration-300'>

@@ -4,7 +4,7 @@ import UsersList from '@/components/UsersList'
 import Tweet from '@/lib/models/tweet'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import { Suspense } from 'react'
 
 const UsersLiked = async ({ params }: { params: { id: string } }) => {
@@ -33,7 +33,8 @@ const UsersLiked = async ({ params }: { params: { id: string } }) => {
   )
 }
 
-const page = ({ params }: { params: { id: string } }) => {
+const page = async (props: { params: Promise<{ id: string }> }) => {
+  const params = await props.params;
   return (
     <>
       <div className='flex space-x-10 p-4 font-bold sticky top-0 z-10 bg-black/80 backdrop-blur-md left-0 text-lg items-center'>

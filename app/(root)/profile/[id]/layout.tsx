@@ -5,7 +5,7 @@ import ProfileTabs from '@/components/ProfileTabs'
 import { Button } from '@/components/ui/button'
 import User from '@/lib/models/user'
 import { connectToDB } from '@/lib/mongoose'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -104,13 +104,18 @@ const Layout = async ({
   )
 }
 
-const ProfileLayout = ({
-  children,
-  params,
-}: {
-  children: React.ReactNode
-  params: { id: string }
-}) => {
+const ProfileLayout = async (
+  props: {
+    children: React.ReactNode
+    params: Promise<{ id: string }>
+  }
+) => {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   return (
     <Suspense fallback={<Loading className='min-h-[90vh] items-center' />}>
       <Layout children={children} params={params} />

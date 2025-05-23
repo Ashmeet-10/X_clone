@@ -2,8 +2,9 @@ import { Bell, Bookmark, Home, LogOutIcon, Mail, Search, User2, Users } from 'lu
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from './ui/button'
-import { SignOutButton, currentUser } from '@clerk/nextjs'
+import { SignOutButton } from '@clerk/nextjs'
 import { Suspense } from 'react'
+import { currentUser } from '@clerk/nextjs/server'
 
 const ProfileLink = async () => {
   const currentuser = await currentUser()

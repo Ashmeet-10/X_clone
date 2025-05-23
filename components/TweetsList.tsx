@@ -1,4 +1,4 @@
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import { connectToDB } from '@/lib/mongoose'
 import TweetCard from './TweetCard'
 import User from '@/lib/models/user'

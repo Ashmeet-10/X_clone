@@ -22,7 +22,8 @@ const FetchUserTweets = async ({ params }: { params: { id: string } }) => {
   )
 }
 
-const page = ({ params }: { params: { id: string } }) => {
+const page = async (props: { params: Promise<{ id: string }> }) => {
+  const params = await props.params;
   return (
     <Suspense fallback={<Loading className='min-h-[60vh] items-start' />}>
       <FetchUserTweets params={params} />

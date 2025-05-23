@@ -44,11 +44,12 @@ const Users = async ({
   )
 }
 
-const page = ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined }
-}) => {
+const page = async (
+  props: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  }
+) => {
+  const searchParams = await props.searchParams;
   return (
     <>
       <div className='flex space-x-10 p-4 font-bold sticky top-0 z-10 bg-black/80 backdrop-blur-md left-0 text-lg items-center'>

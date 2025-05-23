@@ -3,16 +3,13 @@ import '../globals.css'
 import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import Bottombar from '@/components/Bottombar'
-import { ClerkProvider, currentUser } from '@clerk/nextjs'
+import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
 import PostButton from '@/components/Buttons/PostButton'
 import LeftMenu from '@/components/LeftMenu'
 import Rightbar from '@/components/Rightbar'
 import { Suspense } from 'react'
 import Loading from '@/components/Loading'
-import { connectToDB } from '@/lib/mongoose'
-import User from '@/lib/models/user'
-import { redirect } from 'next/navigation'
 import { Analytics } from '@vercel/analytics/next'
 
 export const metadata: Metadata = {
@@ -25,15 +22,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const connectDbPromise = connectToDB()
-  const currentUserPromise = currentUser()
-  const [db, currentUserData] = await Promise.all([connectDbPromise, currentUserPromise])
-  if (!currentUserData) return null
-  const userInfo = await User.findOne({ id: currentUserData.id }).select('onboarded')
-  if (!userInfo) return redirect('/onboarding')
   return (
     <ClerkProvider appearance={{ baseTheme: dark }}>
-      <html lang='en'>
+      <html lang='en' suppressHydrationWarning>
         <body className={`${GeistSans.className} bg-black text-white`}>
           <ThemeProvider
             attribute='class'
