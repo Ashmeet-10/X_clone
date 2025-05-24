@@ -37,7 +37,7 @@ type Props = {
 const AccountProfile = ({ user }: Props) => {
   const router = useRouter()
   const [files, setFiles] = useState<File[]>([])
-  const { startUpload } = useUploadThing('media')
+  const { startUpload } = useUploadThing('imageUploader')
   const pathname = usePathname()
   const { user:userHook } = useUser()
   const form = useForm({

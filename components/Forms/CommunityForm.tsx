@@ -26,7 +26,7 @@ import { createCommunity } from '@/lib/actions/communityActions'
 const CommunityForm = () => {
   const router = useRouter()
   const [files, setFiles] = useState<File[]>([])
-  const { startUpload } = useUploadThing('media')
+  const { startUpload } = useUploadThing('imageUploader')
   const pathname = usePathname()
   const form = useForm<z.infer<typeof communityValidation>>({
     resolver: zodResolver(communityValidation),
