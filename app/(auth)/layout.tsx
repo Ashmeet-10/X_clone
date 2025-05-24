@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@/components/ThemeProvider'
+import { ThemeProvider } from 'next-themes'
 import '../globals.css'
 import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
