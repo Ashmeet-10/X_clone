@@ -35,8 +35,7 @@ export async function createCommunity({
     userInfo.communities = [community._id, ...userInfo.communities]
     await userInfo.save()
     revalidatePath('/communities')
-    redirect(`/communities/${community._id}}`)
-    console.log(community)
+    redirect(`/communities/${community._id}`)
   } catch (error: any) {
     throw new Error(`Error creating community: ${error.message}`)
   }

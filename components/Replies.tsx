@@ -43,7 +43,6 @@ const Replies = async ({
   const replies = tweet.replies.sort(
     (a: Reply, b: Reply) => b.createdAt.getTime() - a.createdAt.getTime()
   )
-  console.log('REPLIES', replies)
   return (
     <div>
       {replies.map((reply: Reply) => (

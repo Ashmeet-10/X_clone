@@ -1,6 +1,6 @@
 import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
-import { fetchLikedTweetsByUserId } from '@/lib/actions/tweetActions'
+import { fetchLikedTweetsByUserId } from '@/lib/dataFetching'
 import { Suspense } from 'react'
 
 const LikedTweets = async ({ params }: { params: { id: string } }) => {

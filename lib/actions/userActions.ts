@@ -5,16 +5,6 @@ import User from '../models/user'
 import { connectToDB } from '../mongoose'
 import { revalidatePath } from 'next/cache'
 
-export async function fetchUser(userId: string) {
-  try {
-    await connectToDB()
-    const userInfo = await User.findOne({ id: userId })
-    return userInfo
-  } catch (error: any) {
-    throw new Error(`Error fetching user info: ${error.message}`)
-  }
-}
-
 export async function updateUser({
   name,
   bio,

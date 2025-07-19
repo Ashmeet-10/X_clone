@@ -1,6 +1,6 @@
 import Loading from '@/components/Loading'
 import TweetsList from '@/components/TweetsList'
-import { fetchTweetsOfFollowingUsers } from '@/lib/actions/tweetActions'
+import { fetchTweetsOfFollowingUsers } from '@/lib/dataFetching'
 import { Suspense } from 'react'
 
 export const dynamic = 'force-dynamic'

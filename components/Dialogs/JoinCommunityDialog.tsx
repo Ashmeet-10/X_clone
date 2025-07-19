@@ -24,7 +24,6 @@ type Props = {
 }
 
 const JoinCommunityDialog = ({ community }: Props) => {
-  console.log(community)
   return (
     <Dialog>
       <DialogTrigger asChild>
